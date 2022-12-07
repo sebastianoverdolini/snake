@@ -7,3 +7,8 @@
 ```
 java Snake.java
 ```
+
+### Testing
+```
+java -ea Tests.java
+```

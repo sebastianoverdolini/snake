@@ -5,11 +5,10 @@
 
 ### Running
 ```
-java Snake.java
+make run
 ```
 
 ### Testing
 ```
-javac -d out Tests.java
-java -ea -cp out Tests
+make test
 ```

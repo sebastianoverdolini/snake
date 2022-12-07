@@ -10,5 +10,6 @@ java Snake.java
 
 ### Testing
 ```
-java -ea Tests.java
+javac -d out Tests.java
+java -ea -cp out Tests
 ```

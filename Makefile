@@ -1,5 +1,5 @@
 run:
-	java Snake.java
+	java SnakeGame.java
 
 test:
 	rm -f -r out

@@ -9,37 +9,27 @@ public final class Snake
 {
     public static void main(String[] args)
     {
-        final var frame = new JFrame("Snake");
         final var frameSize = 500;
+        final var frame = new JFrame("Snake");
+        var game = new Game(10, 0, 0);
         frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        var game = new Game(10, 0, 0);
-        var p = new Panel(game);
-        frame.add(p);
+        frame.add(new JPanel()
+        {
+            @Override
+            protected void paintComponent(Graphics g)
+            {
+                super.paintComponent(g);
+                game.render(g, frameSize);
+            }
+        });
         frame.setVisible(true);
         new Timer(1000, e -> {
             game.update();
-            p.repaint();
+            frame.repaint();
         }).start();
-    }
-
-    public static final class Panel extends JPanel
-    {
-        private final Game game;
-
-        public Panel(Game game)
-        {
-            this.game = game;
-        }
-
-        @Override
-        protected void paintComponent(Graphics g)
-        {
-            super.paintComponent(g);
-            game.render(g, getWidth());
-        }
     }
 
     public static final class Game

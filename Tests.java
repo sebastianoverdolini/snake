@@ -7,7 +7,7 @@ import java.util.List;
 public final class Tests
 {
     public final static List<Test> tests = List.of(
-            new Test("A game paints a black background when rendered", () ->
+            new Test("A game paints the background when rendered", () ->
             {
                 final var game = new Snake.Game();
                 final var g = new FakeGraphics();

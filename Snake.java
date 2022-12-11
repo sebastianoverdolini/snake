@@ -1,9 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public final class Snake
 {
@@ -11,7 +7,7 @@ public final class Snake
     {
         final var frameSize = 500;
         final var frame = new JFrame("Snake");
-        var game = new Game(10, 0, 0);
+        var game = new Game(10, 0, 0, Direction.EAST);
         frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -37,17 +33,29 @@ public final class Snake
         private final int gridSize;
         public int snakeHeadX;
         public int snakeHeadY;
+        public Direction snakeDirection;
 
-        public Game(int gridSize, int snakeHeadX, int snakeHeadY)
+        public Game(
+                int gridSize,
+                int snakeHeadX,
+                int snakeHeadY,
+                Direction snakeDirection)
         {
             this.gridSize = gridSize;
             this.snakeHeadX = snakeHeadX;
             this.snakeHeadY = snakeHeadY;
+            this.snakeDirection = snakeDirection;
         }
 
         public void update()
         {
-            snakeHeadX++;
+            switch (snakeDirection)
+            {
+                case NORTH -> snakeHeadY--;
+                case SOUTH -> snakeHeadY++;
+                case WEST -> snakeHeadX--;
+                case EAST -> snakeHeadX++;
+            }
         }
 
         public void render(Graphics g, int frameSize)
@@ -76,5 +84,13 @@ public final class Snake
         {
             return frameSize / gridSize;
         }
+    }
+
+    enum Direction
+    {
+        NORTH,
+        SOUTH,
+        WEST,
+        EAST,
     }
 }

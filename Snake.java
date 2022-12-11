@@ -11,7 +11,7 @@ public final class Snake
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.add(new Panel(new Game(frameSize)));
+        frame.add(new Panel(new Game()));
         frame.setVisible(true);
     }
 
@@ -29,13 +29,13 @@ public final class Snake
         protected void paintComponent(Graphics g)
         {
             super.paintComponent(g);
-            game.render(g);
+            game.render(g, getWidth());
         }
     }
 
-    public record Game(int size)
+    public record Game()
     {
-        public void render(Graphics g)
+        public void render(Graphics g, int size)
         {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, size, size);

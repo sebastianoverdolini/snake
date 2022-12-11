@@ -3,18 +3,41 @@ import java.awt.image.ImageObserver;
 import java.text.AttributedCharacterIterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public final class Tests
 {
     public final static List<Test> tests = List.of(
             new Test("A game paints the background when rendered", () ->
             {
-                final var game = new Snake.Game();
+                final var game = new Snake.Game(10, 0, 0);
                 final var g = new FakeGraphics();
                 game.render(g, 500);
-                assert g.logs.equals(List.of(
-                        "setColor " + Color.BLACK,
-                        String.format("fillRect %d %d %d %d", 0, 0, 500, 500)));
+                assert g.logs.get(0).equals(
+                        "setColor " + Color.BLACK);
+                assert g.logs.get(1).equals(String.format(
+                        "fillRect %d %d %d %d", 0, 0, 500, 500));
+            }),
+            new Test("A game paints the snake when rendered", () ->
+            {
+                final var snakes = List.of(
+                        Map.of("x", 0, "y", 0),
+                        Map.of("x", 1, "y", 2));
+                for (final var snake : snakes)
+                {
+                    final var game = new Snake.Game(
+                            20, snake.get("x"), snake.get("y"));
+                    final var g = new FakeGraphics();
+                    game.render(g, 100);
+                    assert g.logs.get(2).equals(
+                            "setColor " + Color.WHITE);
+                    assert g.logs.get(3).equals(String.format(
+                            "fillRect %d %d %d %d",
+                            snake.get("x") * (100 / 20),
+                            snake.get("y") * (100 / 20),
+                            100 / 20,
+                            100 / 20));
+                }
             }));
 
     public static final class FakeGraphics extends Graphics

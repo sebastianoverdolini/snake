@@ -3,14 +3,14 @@ import java.awt.image.ImageObserver;
 import java.text.AttributedCharacterIterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public final class Tests
 {
     public final static List<Test> tests = List.of(
             new Test("A game paints the background when rendered", () ->
             {
-                final var game = new Snake.Game(10, 0, 0, null);
+                final var game = new SnakeGame.Game(
+                        10, new SnakeGame.Snake(0, 0, null));
                 final var g = new FakeGraphics();
                 game.render(g, 500);
                 assert g.logs.get(0).equals(
@@ -21,46 +21,46 @@ public final class Tests
             new Test("A game paints the snake when rendered", () ->
             {
                 final var snakes = List.of(
-                        Map.of("x", 0, "y", 0),
-                        Map.of("x", 1, "y", 2));
+                        new SnakeGame.Snake(0, 0, null),
+                        new SnakeGame.Snake(1, 2, null));
                 for (final var snake : snakes)
                 {
-                    final var game = new Snake.Game(
-                            20, snake.get("x"), snake.get("y"), null);
+                    final var game = new SnakeGame.Game(20, snake);
                     final var g = new FakeGraphics();
                     game.render(g, 100);
                     assert g.logs.get(2).equals(
                             "setColor " + Color.WHITE);
                     assert g.logs.get(3).equals(String.format(
                             "fillRect %d %d %d %d",
-                            snake.get("x") * (100 / 20),
-                            snake.get("y") * (100 / 20),
+                            snake.xHead * (100 / 20),
+                            snake.yHead * (100 / 20),
                             100 / 20,
                             100 / 20));
                 }
             }),
             new Test("The snake moves when game updated", () ->
             {
-                final var game = new Snake.Game(20, 0, 0, null);
-                game.snakeDirection = Snake.Direction.EAST;
+                final var snake = new SnakeGame.Snake(0, 0, null);
+                final var game = new SnakeGame.Game(20, snake);
+                snake.direction = SnakeGame.Direction.EAST;
                 game.update();
-                assert game.snakeHeadX == 1;
-                assert game.snakeHeadY == 0;
+                assert snake.xHead == 1;
+                assert snake.yHead == 0;
 
-                game.snakeDirection = Snake.Direction.SOUTH;
+                snake.direction = SnakeGame.Direction.SOUTH;
                 game.update();
-                assert game.snakeHeadX == 1;
-                assert game.snakeHeadY == 1;
+                assert snake.xHead == 1;
+                assert snake.yHead == 1;
 
-                game.snakeDirection = Snake.Direction.WEST;
+                snake.direction = SnakeGame.Direction.WEST;
                 game.update();
-                assert game.snakeHeadX == 0;
-                assert game.snakeHeadY == 1;
+                assert snake.xHead == 0;
+                assert snake.yHead == 1;
 
-                game.snakeDirection = Snake.Direction.NORTH;
+                snake.direction = SnakeGame.Direction.NORTH;
                 game.update();
-                assert game.snakeHeadX == 0;
-                assert game.snakeHeadY == 0;
+                assert snake.xHead == 0;
+                assert snake.yHead == 0;
             }));
 
     public static final class FakeGraphics extends Graphics

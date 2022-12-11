@@ -1,13 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
 
-public final class Snake
+public final class SnakeGame
 {
     public static void main(String[] args)
     {
         final var frameSize = 500;
         final var frame = new JFrame("Snake");
-        var game = new Game(10, 0, 0, Direction.EAST);
+        var game = new Game(10, new Snake(0, 0, Direction.EAST));
         frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -31,37 +31,25 @@ public final class Snake
     public static final class Game
     {
         private final int gridSize;
-        public int snakeHeadX;
-        public int snakeHeadY;
-        public Direction snakeDirection;
+        private final Snake snake;
 
         public Game(
                 int gridSize,
-                int snakeHeadX,
-                int snakeHeadY,
-                Direction snakeDirection)
+                Snake snake)
         {
             this.gridSize = gridSize;
-            this.snakeHeadX = snakeHeadX;
-            this.snakeHeadY = snakeHeadY;
-            this.snakeDirection = snakeDirection;
+            this.snake = snake;
         }
 
         public void update()
         {
-            switch (snakeDirection)
-            {
-                case NORTH -> snakeHeadY--;
-                case SOUTH -> snakeHeadY++;
-                case WEST -> snakeHeadX--;
-                case EAST -> snakeHeadX++;
-            }
+            snake.update();
         }
 
         public void render(Graphics g, int frameSize)
         {
             renderBackground(g, frameSize);
-            renderSnake(g, frameSize);
+            snake.render(g, frameSize / gridSize);
         }
 
         private static void renderBackground(Graphics g, int frameSize)
@@ -69,20 +57,40 @@ public final class Snake
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, frameSize, frameSize);
         }
+    }
 
-        private void renderSnake(Graphics g, int frameSize)
+    static final class Snake
+    {
+        public int xHead;
+        public int yHead;
+        public Direction direction;
+
+        public Snake(int xHead, int yHead, Direction direction)
+        {
+            this.xHead = xHead;
+            this.yHead = yHead;
+            this.direction = direction;
+        }
+
+        public void update()
+        {
+            switch (direction)
+            {
+                case NORTH -> yHead--;
+                case SOUTH -> yHead++;
+                case WEST -> xHead--;
+                case EAST -> xHead++;
+            }
+        }
+
+        private void render(Graphics g, int cellSize)
         {
             g.setColor(Color.WHITE);
             g.fillRect(
-                    snakeHeadX * cellSize(frameSize),
-                    snakeHeadY * cellSize(frameSize),
-                    cellSize(frameSize),
-                    cellSize(frameSize));
-        }
-
-        private int cellSize(int frameSize)
-        {
-            return frameSize / gridSize;
+                    xHead * cellSize,
+                    yHead * cellSize,
+                    cellSize,
+                    cellSize);
         }
     }
 

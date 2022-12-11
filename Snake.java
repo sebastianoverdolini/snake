@@ -6,11 +6,12 @@ public final class Snake
     public static void main(String[] args)
     {
         final var frame = new JFrame("Snake");
-        frame.setSize(500, 500);
+        final var frameSize = 500;
+        frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.add(new Panel(new Game(frame.getWidth(), frame.getHeight())));
+        frame.add(new Panel(new Game(frameSize)));
         frame.setVisible(true);
     }
 
@@ -32,12 +33,12 @@ public final class Snake
         }
     }
 
-    public record Game(int width, int height)
+    public record Game(int size)
     {
         public void render(Graphics g)
         {
             g.setColor(Color.BLACK);
-            g.fillRect(0, 0, width, height);
+            g.fillRect(0, 0, size, size);
         }
     }
 }

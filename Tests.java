@@ -9,7 +9,7 @@ public final class Tests
     public final static List<Test> tests = List.of(
             new Test("A game paints a black background when rendered", () ->
             {
-                final var game = new Snake.Game(500, 500);
+                final var game = new Snake.Game(500);
                 final var g = new FakeGraphics();
                 game.render(g);
                 assert g.logs.equals(List.of(

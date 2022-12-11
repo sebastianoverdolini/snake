@@ -38,6 +38,16 @@ public final class Tests
                             100 / 20,
                             100 / 20));
                 }
+            }),
+            new Test("The snake moves one step east when updated", () ->
+            {
+                final var game = new Snake.Game(20, 0, 0);
+                game.update();
+                assert game.snakeHeadX == 1;
+                assert game.snakeHeadY == 0;
+                game.update();
+                assert game.snakeHeadX == 2;
+                assert game.snakeHeadY == 0;
             }));
 
     public static final class FakeGraphics extends Graphics

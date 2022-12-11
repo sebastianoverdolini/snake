@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public final class SnakeGame
 {
@@ -7,11 +9,14 @@ public final class SnakeGame
     {
         final var frameSize = 500;
         final var frame = new JFrame("Snake");
-        var game = new Game(10, new Snake(0, 0, Direction.EAST));
+        var snake = new Snake(0, 0, Direction.EAST);
+        var game = new Game(10, snake);
         frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+        frame.setFocusable(true);
+        frame.addKeyListener(snake);
         frame.add(new JPanel()
         {
             @Override
@@ -59,7 +64,7 @@ public final class SnakeGame
         }
     }
 
-    static final class Snake
+    static final class Snake implements KeyListener
     {
         public int xHead;
         public int yHead;
@@ -76,12 +81,21 @@ public final class SnakeGame
         {
             switch (direction)
             {
-                case NORTH -> yHead--;
-                case SOUTH -> yHead++;
-                case WEST -> xHead--;
-                case EAST -> xHead++;
+                case NORTH -> goNorth();
+                case SOUTH -> goSouth();
+                case WEST -> goWest();
+                case EAST -> goEast();
             }
         }
+
+        private void goNorth() { yHead--; }
+
+        private void goSouth() { yHead++; }
+
+        private void goWest() { xHead--; }
+
+        private void goEast() { xHead++; }
+
 
         private void render(Graphics g, int cellSize)
         {
@@ -92,6 +106,27 @@ public final class SnakeGame
                     cellSize,
                     cellSize);
         }
+
+        @Override
+        public void keyPressed(KeyEvent e)
+        {
+            direction = switch (e.getKeyCode())
+                    {
+                        case KeyEvent.VK_UP -> Direction.NORTH;
+                        case KeyEvent.VK_DOWN -> Direction.SOUTH;
+                        case KeyEvent.VK_LEFT -> Direction.WEST;
+                        case KeyEvent.VK_RIGHT -> Direction.EAST;
+                        default -> direction;
+                    };
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e)
+        {}
+
+        @Override
+        public void keyReleased(KeyEvent e)
+        {}
     }
 
     enum Direction

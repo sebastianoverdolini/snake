@@ -1,5 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public final class Snake
 {
@@ -11,14 +15,19 @@ public final class Snake
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.add(new Panel(new Game(10, 0, 0)));
+        var game = new Game(10, 0, 0);
+        var p = new Panel(game);
+        frame.add(p);
         frame.setVisible(true);
+        new Timer(1000, e -> {
+            game.update();
+            p.repaint();
+        }).start();
     }
 
     public static final class Panel extends JPanel
     {
         private final Game game;
-
 
         public Panel(Game game)
         {
@@ -33,8 +42,24 @@ public final class Snake
         }
     }
 
-    public record Game(int gridSize, int snakeHeadX, int snakeHeadY)
+    public static final class Game
     {
+        private final int gridSize;
+        public int snakeHeadX;
+        public int snakeHeadY;
+
+        public Game(int gridSize, int snakeHeadX, int snakeHeadY)
+        {
+            this.gridSize = gridSize;
+            this.snakeHeadX = snakeHeadX;
+            this.snakeHeadY = snakeHeadY;
+        }
+
+        public void update()
+        {
+            snakeHeadX++;
+        }
+
         public void render(Graphics g, int frameSize)
         {
             renderBackground(g, frameSize);

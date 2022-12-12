@@ -5,10 +5,10 @@
 
 ### Running
 ```
-make run
+sh run.sh
 ```
 
 ### Testing
 ```
-make test
+sh test.sh
 ```

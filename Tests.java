@@ -10,7 +10,7 @@ public final class Tests
             new Test("A game paints the background when rendered", () ->
             {
                 final var game = new SnakeGame.Game(
-                        10, new SnakeGame.Snake(0, 0, null));
+                        10, SnakeGame.Snake.alive(0, 0, null));
                 final var g = new FakeGraphics();
                 game.render(g, 500);
                 assert g.logs.get(0).equals(
@@ -21,8 +21,8 @@ public final class Tests
             new Test("A game paints the snake when rendered", () ->
             {
                 final var snakes = List.of(
-                        new SnakeGame.Snake(0, 0, null),
-                        new SnakeGame.Snake(1, 2, null));
+                        SnakeGame.Snake.alive(0, 0, null),
+                        SnakeGame.Snake.alive(1, 2, null));
                 for (final var snake : snakes)
                 {
                     final var game = new SnakeGame.Game(20, snake);
@@ -40,7 +40,7 @@ public final class Tests
             }),
             new Test("The snake moves when game updated", () ->
             {
-                final var snake = new SnakeGame.Snake(0, 0, null);
+                final var snake = SnakeGame.Snake.alive(0, 0, null);
                 final var game = new SnakeGame.Game(20, snake);
                 snake.direction = SnakeGame.Direction.EAST;
                 game.update();
@@ -61,6 +61,25 @@ public final class Tests
                 game.update();
                 assert snake.xHead == 0;
                 assert snake.yHead == 0;
+            }),
+            new Test("The snake dies when it hits a wall", () ->
+            {
+                for (final var direction : SnakeGame.Direction.values())
+                {
+                    final var snake = SnakeGame.Snake.alive(0, 0, direction);
+                    final var game = new SnakeGame.Game(1, snake);
+                    game.update();
+                    assert !snake.isAlive();
+                }
+            }),
+            new Test("A dead snake doesn't move", () ->
+            {
+                final var snake = new SnakeGame.Snake(
+                        1, 1, SnakeGame.Direction.EAST, false);
+                final var game = new SnakeGame.Game(3, snake);
+                game.update();
+                assert snake.xHead == 1;
+                assert snake.yHead == 1;
             }));
 
     public static final class FakeGraphics extends Graphics

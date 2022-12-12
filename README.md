@@ -12,3 +12,8 @@ sh run.sh
 ```
 sh test.sh
 ```
+
+### TCR
+```
+sh tcr.sh
+```

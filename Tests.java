@@ -306,7 +306,20 @@ public final class Tests
 
     public static void main(String[] args)
     {
-        tests.forEach(Test::run);
+        var success = true;
+        for (var test : tests)
+        {
+            try
+            {
+                test.run();
+            }
+            catch (AssertionError e)
+            {
+                success = false;
+                System.out.println("FAILED: " + test.description);
+            }
+        }
+        if (!success) System.exit(1);
     }
 
     public record Test(
@@ -316,14 +329,7 @@ public final class Tests
         @Override
         public void run()
         {
-            try
-            {
-                runnable.run();
-            }
-            catch (AssertionError e)
-            {
-                System.out.println("FAILED: " + description);
-            }
+            runnable.run();
         }
     }
 }

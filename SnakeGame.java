@@ -9,7 +9,7 @@ public final class SnakeGame
     {
         final var frameSize = 500;
         final var frame = new JFrame("Snake");
-        var snake = new Snake(0, 0, Direction.EAST);
+        var snake = Snake.alive(0, 0, Direction.EAST);
         var game = new Game(10, snake);
         frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
@@ -48,7 +48,7 @@ public final class SnakeGame
 
         public void update()
         {
-            snake.update();
+            snake.update(gridSize);
         }
 
         public void render(Graphics g, int frameSize)
@@ -69,22 +69,47 @@ public final class SnakeGame
         public int xHead;
         public int yHead;
         public Direction direction;
+        private boolean isAlive;
 
-        public Snake(int xHead, int yHead, Direction direction)
+        Snake(int xHead, int yHead, Direction direction, boolean isAlive)
         {
             this.xHead = xHead;
             this.yHead = yHead;
             this.direction = direction;
+            this.isAlive = isAlive;
         }
 
-        public void update()
+        public static Snake alive(int xHead, int yHead, Direction direction)
         {
-            switch (direction)
+            return new Snake(xHead, yHead, direction, true);
+        }
+
+        public void update(int gridSize)
+        {
+            if (isAlive)
             {
-                case NORTH -> goNorth();
-                case SOUTH -> goSouth();
-                case WEST -> goWest();
-                case EAST -> goEast();
+                switch (direction)
+                {
+                    case NORTH ->
+                    {
+                        if (yHead == 0) die();
+                        else goNorth(); }
+                    case SOUTH ->
+                    {
+                        if (yHead == gridSize - 1) die();
+                        else goSouth();
+                    }
+                    case WEST ->
+                    {
+                        if (xHead == 0) die();
+                        else goWest();
+                    }
+                    case EAST ->
+                    {
+                        if (xHead == gridSize - 1) die();
+                        else goEast();
+                    }
+                }
             }
         }
 
@@ -95,6 +120,16 @@ public final class SnakeGame
         private void goWest() { xHead--; }
 
         private void goEast() { xHead++; }
+
+        private void die()
+        {
+            isAlive = false;
+        }
+
+        public boolean isAlive()
+        {
+            return isAlive;
+        }
 
 
         private void render(Graphics g, int cellSize)

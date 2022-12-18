@@ -41,27 +41,28 @@ public final class Tests
             }),
             new Test("The snake moves when game updated", () ->
             {
-                final var snake = SnakeGame.Snake.alive(0, 0, null);
-                final var game = new SnakeGame.Game(20, snake);
-                snake.direction = SnakeGame.Direction.EAST;
-                game.update();
-                assert snake.xHead == 1;
-                assert snake.yHead == 0;
-
-                snake.direction = SnakeGame.Direction.SOUTH;
-                game.update();
-                assert snake.xHead == 1;
-                assert snake.yHead == 1;
-
-                snake.direction = SnakeGame.Direction.WEST;
-                game.update();
-                assert snake.xHead == 0;
-                assert snake.yHead == 1;
-
-                snake.direction = SnakeGame.Direction.NORTH;
-                game.update();
-                assert snake.xHead == 0;
-                assert snake.yHead == 0;
+                record TestCase(
+                        SnakeGame.Snake snake,
+                        SnakeGame.Snake expectedSnakeAfterUpdate) {}
+                for (var testCase : List.of(
+                        new TestCase(
+                                SnakeGame.Snake.alive(1, 1, SnakeGame.Direction.NORTH),
+                                SnakeGame.Snake.alive(1, 0, SnakeGame.Direction.NORTH)),
+                        new TestCase(
+                                SnakeGame.Snake.alive(1, 1, SnakeGame.Direction.SOUTH),
+                                SnakeGame.Snake.alive(1, 2, SnakeGame.Direction.SOUTH)),
+                        new TestCase(
+                                SnakeGame.Snake.alive(1, 1, SnakeGame.Direction.WEST),
+                                SnakeGame.Snake.alive(0, 1, SnakeGame.Direction.WEST)),
+                        new TestCase(
+                                SnakeGame.Snake.alive(1, 1, SnakeGame.Direction.EAST),
+                                SnakeGame.Snake.alive(2, 1, SnakeGame.Direction.EAST))))
+                {
+                    new SnakeGame.Game(3, testCase.snake()).update();
+                    assert testCase.snake().xHead == testCase.expectedSnakeAfterUpdate().xHead;
+                    assert testCase.snake().yHead == testCase.expectedSnakeAfterUpdate().yHead;
+                    assert testCase.snake().direction == testCase.expectedSnakeAfterUpdate().direction;
+                }
             }),
             new Test("The snake keeps its direction when a player presses an unknown button", () ->
             {

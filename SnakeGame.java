@@ -11,7 +11,7 @@ public final class SnakeGame
         final var frameSize = 500;
         final var frame = new JFrame("Snake");
         var snake = Snake.alive(0, 0, Direction.EAST);
-        var game = new Game(10, snake);
+        var game = new Game(20, snake);
         frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

@@ -33,6 +33,13 @@ public final class Tests
                                 100 / 20,
                                 100 / 20)));
             }),
+            new Test("A dead snake is gray", () ->
+            {
+                var snake = new SnakeGame.Snake(0, 0, null, false);
+                var g = new FakeGraphics();
+                snake.render(g, 5);
+                assert g.logs.get(0).equals("setColor " + Color.GRAY);
+            }),
             new Test("The snake moves when game updated", () ->
             {
                 record TestCase(

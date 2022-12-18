@@ -10,34 +10,28 @@ public final class Tests
     public final static List<Test> tests = List.of(
             new Test("A game paints the background when rendered", () ->
             {
-                final var game = new SnakeGame.Game(
+                var game = new SnakeGame.Game(
                         10, SnakeGame.Snake.alive(0, 0, null));
-                final var g = new FakeGraphics();
+                var g = new FakeGraphics();
                 game.render(g, 500);
-                assert g.logs.get(0).equals(
-                        "setColor " + Color.BLACK);
-                assert g.logs.get(1).equals(String.format(
-                        "fillRect %d %d %d %d", 0, 0, 500, 500));
+                assert g.logs.subList(0, 2).equals(List.of(
+                        "setColor " + Color.BLACK,
+                        String.format("fillRect %d %d %d %d", 0, 0, 500, 500)));
             }),
             new Test("A game paints the snake when rendered", () ->
             {
-                final var snakes = List.of(
-                        SnakeGame.Snake.alive(0, 0, null),
-                        SnakeGame.Snake.alive(1, 2, null));
-                for (final var snake : snakes)
-                {
-                    final var game = new SnakeGame.Game(20, snake);
-                    final var g = new FakeGraphics();
-                    game.render(g, 100);
-                    assert g.logs.get(2).equals(
-                            "setColor " + Color.WHITE);
-                    assert g.logs.get(3).equals(String.format(
-                            "fillRect %d %d %d %d",
-                            snake.xHead * (100 / 20),
-                            snake.yHead * (100 / 20),
-                            100 / 20,
-                            100 / 20));
-                }
+                var snake = SnakeGame.Snake.alive(1, 2, null);
+                var game = new SnakeGame.Game(20, snake);
+                var g = new FakeGraphics();
+                game.render(g, 100);
+                assert g.logs.subList(2, 4).equals(List.of(
+                        "setColor " + Color.WHITE,
+                        String.format(
+                                "fillRect %d %d %d %d",
+                                snake.xHead * (100 / 20),
+                                snake.yHead * (100 / 20),
+                                100 / 20,
+                                100 / 20)));
             }),
             new Test("The snake moves when game updated", () ->
             {
@@ -66,7 +60,7 @@ public final class Tests
             }),
             new Test("The snake keeps its direction when a player presses an unknown button", () ->
             {
-                final var snake = SnakeGame.Snake.alive(0, 0, SnakeGame.Direction.EAST);
+                var snake = SnakeGame.Snake.alive(0, 0, SnakeGame.Direction.EAST);
                 snake.keyPressed(new KeyEvent(
                         new Component() {}, 0, 0, 0, KeyEvent.VK_B, '\0'));
                 assert snake.direction == SnakeGame.Direction.EAST;
@@ -83,7 +77,7 @@ public final class Tests
                         new Case(SnakeGame.Direction.NORTH, pressDownArrowKey()),
                         new Case(SnakeGame.Direction.SOUTH, pressUpArrowKey())))
                 {
-                    final var snake = SnakeGame.Snake.alive(
+                    var snake = SnakeGame.Snake.alive(
                             0, 0, testCase.initialSnakeDirection());
                     snake.keyPressed(testCase.playerPressedKey());
                     assert snake.direction == testCase.initialSnakeDirection();
@@ -91,19 +85,19 @@ public final class Tests
             }),
             new Test("The snake dies when it hits a wall", () ->
             {
-                for (final var direction : SnakeGame.Direction.values())
+                for (var direction : SnakeGame.Direction.values())
                 {
-                    final var snake = SnakeGame.Snake.alive(0, 0, direction);
-                    final var game = new SnakeGame.Game(1, snake);
+                    var snake = SnakeGame.Snake.alive(0, 0, direction);
+                    var game = new SnakeGame.Game(1, snake);
                     game.update();
                     assert !snake.isAlive();
                 }
             }),
             new Test("A dead snake doesn't move", () ->
             {
-                final var snake = new SnakeGame.Snake(
+                var snake = new SnakeGame.Snake(
                         1, 1, SnakeGame.Direction.EAST, false);
-                final var game = new SnakeGame.Game(3, snake);
+                var game = new SnakeGame.Game(3, snake);
                 game.update();
                 assert snake.xHead == 1;
                 assert snake.yHead == 1;

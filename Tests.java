@@ -63,6 +63,13 @@ public final class Tests
                 assert snake.xHead == 0;
                 assert snake.yHead == 0;
             }),
+            new Test("The snake keeps its direction when a player presses an unknown button", () ->
+            {
+                final var snake = SnakeGame.Snake.alive(0, 0, SnakeGame.Direction.EAST);
+                snake.keyPressed(new KeyEvent(
+                        new Component() {}, 0, 0, 0, KeyEvent.VK_B, '\0'));
+                assert snake.direction == SnakeGame.Direction.EAST;
+            }),
             new Test("The snake keeps its direction when a player tries to reverse it", () ->
             {
                 record Case(

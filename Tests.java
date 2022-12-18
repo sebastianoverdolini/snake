@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.ImageObserver;
 import java.text.AttributedCharacterIterator;
 import java.util.LinkedList;
@@ -62,6 +63,24 @@ public final class Tests
                 assert snake.xHead == 0;
                 assert snake.yHead == 0;
             }),
+            new Test("The snake keeps its direction when a player tries to reverse it", () ->
+            {
+                record Case(
+                        SnakeGame.Direction initialSnakeDirection,
+                        KeyEvent playerPressedKey)
+                { }
+                for (var testCase : List.of(
+                        new Case(SnakeGame.Direction.EAST, pressLeftArrowKey()),
+                        new Case(SnakeGame.Direction.WEST, pressRightArrowKey()),
+                        new Case(SnakeGame.Direction.NORTH, pressDownArrowKey()),
+                        new Case(SnakeGame.Direction.SOUTH, pressUpArrowKey())))
+                {
+                    final var snake = SnakeGame.Snake.alive(
+                            0, 0, testCase.initialSnakeDirection());
+                    snake.keyPressed(testCase.playerPressedKey());
+                    assert snake.direction == testCase.initialSnakeDirection();
+                }
+            }),
             new Test("The snake dies when it hits a wall", () ->
             {
                 for (final var direction : SnakeGame.Direction.values())
@@ -81,6 +100,30 @@ public final class Tests
                 assert snake.xHead == 1;
                 assert snake.yHead == 1;
             }));
+
+    public static KeyEvent pressLeftArrowKey()
+    {
+        return new KeyEvent(
+                new Component() {}, 0, 0, 0, KeyEvent.VK_LEFT, '\0');
+    }
+
+    public static KeyEvent pressRightArrowKey()
+    {
+        return new KeyEvent(
+                new Component() {}, 0, 0, 0, KeyEvent.VK_RIGHT, '\0');
+    }
+
+    public static KeyEvent pressDownArrowKey()
+    {
+        return new KeyEvent(
+                new Component() {}, 0, 0, 0, KeyEvent.VK_DOWN, '\0');
+    }
+
+    public static KeyEvent pressUpArrowKey()
+    {
+        return new KeyEvent(
+                new Component() {}, 0, 0, 0, KeyEvent.VK_UP, '\0');
+    }
 
     public static final class FakeGraphics extends Graphics
     {

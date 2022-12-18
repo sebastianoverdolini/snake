@@ -10,25 +10,28 @@ public final class SnakeGame
     {
         final var frameSize = 500;
         final var frame = new JFrame("Snake");
-        var snake = Snake.alive(0, 0, Direction.EAST);
-        var game = new Game(20, snake);
+        var snake = Snake.alive(0, 0, 20, Direction.EAST);
+        var game = new Game(500, snake);
         frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setFocusable(true);
         frame.addKeyListener(snake);
-        frame.add(new JPanel()
+        var panel = new JPanel()
         {
             @Override
             protected void paintComponent(Graphics g)
             {
                 super.paintComponent(g);
-                game.render(g, frameSize);
+                game.render(g);
             }
-        });
+        };
+        panel.setPreferredSize(new Dimension(frameSize, frameSize));
+        frame.add(panel);
+        frame.pack();
         frame.setVisible(true);
-        new Timer(1000, e -> {
+        new Timer(10, e -> {
             game.update();
             frame.repaint();
         }).start();
@@ -36,26 +39,26 @@ public final class SnakeGame
 
     public static final class Game
     {
-        private final int gridSize;
+        private final int frameSize;
         private final Snake snake;
 
         public Game(
-                int gridSize,
+                int frameSize,
                 Snake snake)
         {
-            this.gridSize = gridSize;
+            this.frameSize = frameSize;
             this.snake = snake;
         }
 
         public void update()
         {
-            snake.update(gridSize);
+            snake.update(frameSize);
         }
 
-        public void render(Graphics g, int frameSize)
+        public void render(Graphics g)
         {
             renderBackground(g, frameSize);
-            snake.render(g, frameSize / gridSize);
+            snake.render(g);
         }
 
         private static void renderBackground(Graphics g, int frameSize)
@@ -69,35 +72,41 @@ public final class SnakeGame
     {
         public int xHead;
         public int yHead;
-        public Direction direction;
+        public int size;
+        public Direction currentDirection;
+        public Direction nextDirection;
         private boolean isAlive;
 
-        Snake(int xHead, int yHead, Direction direction, boolean isAlive)
+        Snake(int xHead, int yHead, int size, Direction currentDirection, boolean isAlive)
         {
             this.xHead = xHead;
             this.yHead = yHead;
-            this.direction = direction;
+            this.size = size;
+            this.currentDirection = currentDirection;
             this.isAlive = isAlive;
         }
 
-        public static Snake alive(int xHead, int yHead, Direction direction)
+        public static Snake alive(int xHead, int yHead, int size, Direction direction)
         {
-            return new Snake(xHead, yHead, direction, true);
+            return new Snake(xHead, yHead, size, direction, true);
         }
 
-        public void update(int gridSize)
+        public void update(int frameSize)
         {
             if (isAlive)
             {
-                switch (direction)
+                if (wantsTurn() && canTurn())
+                    turn();
+                switch (currentDirection)
                 {
                     case NORTH ->
                     {
                         if (yHead == 0) die();
-                        else goNorth(); }
+                        else goNorth();
+                    }
                     case SOUTH ->
                     {
-                        if (yHead == gridSize - 1) die();
+                        if (yHead + size == frameSize) die();
                         else goSouth();
                     }
                     case WEST ->
@@ -107,11 +116,27 @@ public final class SnakeGame
                     }
                     case EAST ->
                     {
-                        if (xHead == gridSize - 1) die();
+                        if (xHead + size == frameSize) die();
                         else goEast();
                     }
                 }
             }
+        }
+
+        private boolean wantsTurn()
+        {
+            return nextDirection != null;
+        }
+
+        private boolean canTurn()
+        {
+            return xHead % size == 0 && yHead % size == 0;
+        }
+
+        private void turn()
+        {
+            currentDirection = nextDirection;
+            nextDirection = null;
         }
 
         private void goNorth() { yHead--; }
@@ -132,25 +157,21 @@ public final class SnakeGame
             return isAlive;
         }
 
-        public void render(Graphics g, int cellSize)
+        public void render(Graphics g)
         {
             if (isAlive())
                 g.setColor(Color.WHITE);
             else
                 g.setColor(Color.GRAY);
-            g.fillRect(
-                    xHead * cellSize,
-                    yHead * cellSize,
-                    cellSize,
-                    cellSize);
+            g.fillRect(xHead, yHead, size, size);
         }
 
         @Override
         public void keyPressed(KeyEvent e)
         {
             if (Direction.keyEvent(e).isPresent() &&
-                    Direction.keyEvent(e).get().isNotOpposite(direction))
-                direction = Direction.keyEvent(e).get();
+                    Direction.keyEvent(e).get().isNotOpposite(currentDirection))
+                nextDirection = Direction.keyEvent(e).get();
         }
 
         @Override

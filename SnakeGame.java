@@ -77,7 +77,12 @@ public final class SnakeGame
         public Direction nextDirection;
         private boolean isAlive;
 
-        Snake(int xHead, int yHead, int size, Direction currentDirection, boolean isAlive)
+        Snake(
+                int xHead,
+                int yHead,
+                int size,
+                Direction currentDirection,
+                boolean isAlive)
         {
             this.xHead = xHead;
             this.yHead = yHead;
@@ -86,41 +91,58 @@ public final class SnakeGame
             this.isAlive = isAlive;
         }
 
-        public static Snake alive(int xHead, int yHead, int size, Direction direction)
+        public static Snake alive(
+                int xHead,
+                int yHead,
+                int size,
+                Direction direction)
         {
             return new Snake(xHead, yHead, size, direction, true);
         }
 
         public void update(int frameSize)
         {
-            if (isAlive)
+            if (isAlive())
             {
                 if (wantsTurn() && canTurn())
                     turn();
-                switch (currentDirection)
-                {
-                    case NORTH ->
-                    {
-                        if (yHead == 0) die();
-                        else goNorth();
-                    }
-                    case SOUTH ->
-                    {
-                        if (yHead + size == frameSize) die();
-                        else goSouth();
-                    }
-                    case WEST ->
-                    {
-                        if (xHead == 0) die();
-                        else goWest();
-                    }
-                    case EAST ->
-                    {
-                        if (xHead + size == frameSize) die();
-                        else goEast();
-                    }
-                }
+                slither(frameSize);
             }
+        }
+
+        private void slither(int frameSize)
+        {
+            switch (currentDirection)
+            {
+                case NORTH -> goNorth();
+                case SOUTH -> goSouth(frameSize);
+                case WEST -> goWest();
+                case EAST -> goEast(frameSize);
+            }
+        }
+
+        private void goNorth()
+        {
+            if (yHead == 0) die();
+            else yHead--;
+        }
+
+        private void goSouth(int frameSize)
+        {
+            if (yHead + size == frameSize) die();
+            else yHead++;
+        }
+
+        private void goWest()
+        {
+            if (xHead == 0) die();
+            else xHead--;
+        }
+
+        private void goEast(int frameSize)
+        {
+            if (xHead + size == frameSize) die();
+            else xHead++;
         }
 
         private boolean wantsTurn()
@@ -138,14 +160,6 @@ public final class SnakeGame
             currentDirection = nextDirection;
             nextDirection = null;
         }
-
-        private void goNorth() { yHead--; }
-
-        private void goSouth() { yHead++; }
-
-        private void goWest() { xHead--; }
-
-        private void goEast() { xHead++; }
 
         private void die()
         {

@@ -132,10 +132,12 @@ public final class SnakeGame
             return isAlive;
         }
 
-
-        private void render(Graphics g, int cellSize)
+        public void render(Graphics g, int cellSize)
         {
-            g.setColor(Color.WHITE);
+            if (isAlive())
+                g.setColor(Color.WHITE);
+            else
+                g.setColor(Color.GRAY);
             g.fillRect(
                     xHead * cellSize,
                     yHead * cellSize,

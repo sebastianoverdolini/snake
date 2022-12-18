@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Optional;
 
 public final class SnakeGame
 {
@@ -145,14 +146,9 @@ public final class SnakeGame
         @Override
         public void keyPressed(KeyEvent e)
         {
-            direction = switch (e.getKeyCode())
-                    {
-                        case KeyEvent.VK_UP -> Direction.NORTH;
-                        case KeyEvent.VK_DOWN -> Direction.SOUTH;
-                        case KeyEvent.VK_LEFT -> Direction.WEST;
-                        case KeyEvent.VK_RIGHT -> Direction.EAST;
-                        default -> direction;
-                    };
+            if (Direction.keyEvent(e).isPresent() &&
+                    Direction.keyEvent(e).get().isNotOpposite(direction))
+                direction = Direction.keyEvent(e).get();
         }
 
         @Override
@@ -169,6 +165,34 @@ public final class SnakeGame
         NORTH,
         SOUTH,
         WEST,
-        EAST,
+        EAST;
+
+        private static Optional<Direction> keyEvent(KeyEvent e)
+        {
+            return switch (e.getKeyCode())
+                    {
+                        case KeyEvent.VK_UP -> Optional.of(Direction.NORTH);
+                        case KeyEvent.VK_DOWN -> Optional.of(Direction.SOUTH);
+                        case KeyEvent.VK_LEFT -> Optional.of(Direction.WEST);
+                        case KeyEvent.VK_RIGHT -> Optional.of(Direction.EAST);
+                        default -> Optional.empty();
+                    };
+        }
+
+        private boolean isNotOpposite(Direction direction)
+        {
+            return valueOf(name()) != direction.opposite();
+        }
+
+        private Direction opposite()
+        {
+            return switch (valueOf(name()))
+                    {
+                        case NORTH -> SOUTH;
+                        case SOUTH -> NORTH;
+                        case WEST -> EAST;
+                        case EAST -> WEST;
+                    };
+        }
     }
 }

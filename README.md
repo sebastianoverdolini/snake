@@ -5,15 +5,15 @@
 
 ### Running
 ```
-sh run.sh
+make run
 ```
 
 ### Testing
 ```
-sh test.sh
+make test
 ```
 
 ### TCR
 ```
-sh tcr.sh
+make tcr
 ```

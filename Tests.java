@@ -8,7 +8,8 @@ import java.util.List;
 public final class Tests
 {
     public final static List<Test> tests = List.of(
-            test("A game paints the background when rendered", () -> {
+            new Test("A game paints the background when rendered", () ->
+            {
                 var game = new SnakeGame.Game(
                         500, SnakeGame.Snake.alive(0, 0, 10, null));
                 var g = new FakeGraphics();
@@ -17,7 +18,8 @@ public final class Tests
                         "setColor " + Color.BLACK,
                         String.format("fillRect %d %d %d %d", 0, 0, 500, 500)));
             }),
-            test("A game paints the snake when rendered", () -> {
+            new Test("A game paints the snake when rendered", () ->
+            {
                 var snake = SnakeGame.Snake.alive(1, 2, 10, null);
                 var game = new SnakeGame.Game(100, snake);
                 var g = new FakeGraphics();
@@ -28,14 +30,16 @@ public final class Tests
                                 "fillRect %d %d %d %d",
                                 snake.xHead, snake.yHead, 10, 10)));
             }),
-            test("A dead snake is gray", () -> {
+            new Test("A dead snake is gray", () ->
+            {
                 var snake = new SnakeGame.Snake(0, 0, 10, null, false);
                 var g = new FakeGraphics();
                 snake.render(g);
                 assert g.logs.get(0).equals("setColor " + Color.GRAY);
             }),
-            test("The snake moves towards its direction", List.of(
-                    () -> {
+            new Test("The snake moves towards its direction", List.of(
+                    () ->
+                    {
                         var snake = SnakeGame.Snake.alive(
                                 1, 1, 10, SnakeGame.Direction.NORTH);
                         new SnakeGame.Game(3, snake).update();
@@ -43,7 +47,8 @@ public final class Tests
                         assert snake.yHead == 0;
                         assert snake.currentDirection == SnakeGame.Direction.NORTH;
                     },
-                    () -> {
+                    () ->
+                    {
                         var snake = SnakeGame.Snake.alive(
                                 1, 1, 10, SnakeGame.Direction.SOUTH);
                         new SnakeGame.Game(3, snake).update();
@@ -51,7 +56,8 @@ public final class Tests
                         assert snake.yHead == 2;
                         assert snake.currentDirection == SnakeGame.Direction.SOUTH;
                     },
-                    () -> {
+                    () ->
+                    {
                         var snake = SnakeGame.Snake.alive(
                                 1, 1, 10, SnakeGame.Direction.WEST);
                         new SnakeGame.Game(3, snake).update();
@@ -59,7 +65,8 @@ public final class Tests
                         assert snake.yHead == 1;
                         assert snake.currentDirection == SnakeGame.Direction.WEST;
                     },
-                    () -> {
+                    () ->
+                    {
                         var snake = SnakeGame.Snake.alive(
                                 1, 1, 10, SnakeGame.Direction.EAST);
                         new SnakeGame.Game(3, snake).update();
@@ -67,8 +74,9 @@ public final class Tests
                         assert snake.yHead == 1;
                         assert snake.currentDirection == SnakeGame.Direction.EAST;
                     })),
-            test("The snake turns only when it completely fills a cell ", List.of(
-                    () -> {
+            new Test("The snake turns only when it completely fills a cell ", List.of(
+                    () ->
+                    {
                         var snake = SnakeGame.Snake.alive(
                                 1, 0, 2, SnakeGame.Direction.EAST);
                         var game = new SnakeGame.Game(6, snake);
@@ -80,7 +88,8 @@ public final class Tests
                         assert snake.xHead == 2;
                         assert snake.yHead == 1;
                     },
-                    () -> {
+                    () ->
+                    {
                         var snake = SnakeGame.Snake.alive(
                                 0, 1, 2, SnakeGame.Direction.SOUTH);
                         var game = new SnakeGame.Game(6, snake);
@@ -92,35 +101,43 @@ public final class Tests
                         assert snake.xHead == 1;
                         assert snake.yHead == 2;
                     })),
-            test("The snake keeps its direction when a player presses an unknown button", () -> {
+            new Test("The snake keeps its direction when a player presses an unknown button", () ->
+            {
                 var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.EAST);
                 snake.keyPressed(new KeyEvent(
-                        new Component() {}, 0, 0, 0, KeyEvent.VK_B, '\0'));
+                        new Component()
+                        {
+                        }, 0, 0, 0, KeyEvent.VK_B, '\0'));
                 assert snake.currentDirection == SnakeGame.Direction.EAST;
             }),
-            test("The snake keeps its direction when a player tries to reverse it", List.of(
-                    () -> {
+            new Test("The snake keeps its direction when a player tries to reverse it", List.of(
+                    () ->
+                    {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.NORTH);
                         snake.keyPressed(pressDownArrowKey());
                         assert snake.currentDirection == SnakeGame.Direction.NORTH;
                     },
-                    () -> {
+                    () ->
+                    {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.SOUTH);
                         snake.keyPressed(pressUpArrowKey());
                         assert snake.currentDirection == SnakeGame.Direction.SOUTH;
                     },
-                    () -> {
+                    () ->
+                    {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.WEST);
                         snake.keyPressed(pressRightArrowKey());
                         assert snake.currentDirection == SnakeGame.Direction.WEST;
                     },
-                    () -> {
+                    () ->
+                    {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.EAST);
                         snake.keyPressed(pressLeftArrowKey());
                         assert snake.currentDirection == SnakeGame.Direction.EAST;
                     }
             )),
-            test("The snake dies when it hits a wall", () -> {
+            new Test("The snake dies when it hits a wall", () ->
+            {
                 for (var direction : SnakeGame.Direction.values())
                 {
                     var snake = SnakeGame.Snake.alive(0, 0, 10, direction);
@@ -129,7 +146,8 @@ public final class Tests
                     assert !snake.isAlive();
                 }
             }),
-            test("A dead snake doesn't move", () -> {
+            new Test("A dead snake doesn't move", () ->
+            {
                 var snake = new SnakeGame.Snake(
                         1, 1, 10, SnakeGame.Direction.EAST, false);
                 var game = new SnakeGame.Game(3, snake);
@@ -386,40 +404,50 @@ public final class Tests
 
     public static void main(String[] args)
     {
-        var success = true;
-        for (var test : tests)
+        if (tests.stream().allMatch(Test::succeeds))
+            System.out.println("SUCCESS");
+        else
+        {
+            tests.stream()
+                    .filter(Test::fails)
+                    .map(test -> "FAILED: " + test.description)
+                    .forEach(System.err::println);
+            System.exit(1);
+        }
+    }
+
+    public static final class Test
+    {
+        public final String description;
+        private final Runnable test;
+
+        public Test(String description, Runnable test)
+        {
+            this.description = description;
+            this.test = test;
+        }
+
+        public Test(String description, List<Runnable> tests)
+        {
+            this(description, () -> tests.forEach(Runnable::run));
+        }
+
+        public boolean succeeds()
         {
             try
             {
                 test.run();
+                return true;
             }
             catch (AssertionError e)
             {
-                success = false;
-                System.out.println("FAILED: " + test.description);
+                return false;
             }
         }
-        if (!success) System.exit(1);
-    }
 
-    public record Test(
-            String description,
-            Runnable runnable) implements Runnable
-    {
-        @Override
-        public void run()
+        public boolean fails()
         {
-            runnable.run();
+            return !succeeds();
         }
-    }
-
-    public static Test test(String description, Runnable test)
-    {
-        return new Test(description, test);
-    }
-
-    public static Test test(String description, List<Runnable> tests)
-    {
-        return new Test(description, () -> tests.forEach(Runnable::run));
     }
 }

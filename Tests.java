@@ -14,9 +14,7 @@ public final class Tests
                         500, SnakeGame.Snake.alive(0, 0, 10, null));
                 var g = new FakeGraphics();
                 game.render(g);
-                assert g.logs.subList(0, 2).equals(List.of(
-                        "setColor " + Color.BLACK,
-                        String.format("fillRect %d %d %d %d", 0, 0, 500, 500)));
+                assert g.hasPaintedTheGameBackground();
             }),
             new Test("A game paints the snake when rendered", () ->
             {
@@ -24,18 +22,14 @@ public final class Tests
                 var game = new SnakeGame.Game(100, snake);
                 var g = new FakeGraphics();
                 game.render(g);
-                assert g.logs.subList(2, 4).equals(List.of(
-                        "setColor " + Color.WHITE,
-                        String.format(
-                                "fillRect %d %d %d %d",
-                                snake.xHead, snake.yHead, 10, 10)));
+                assert g.hasPaintedTheSnake(snake);
             }),
             new Test("A dead snake is gray", () ->
             {
                 var snake = new SnakeGame.Snake(0, 0, 10, null, false);
                 var g = new FakeGraphics();
                 snake.render(g);
-                assert g.logs.get(0).equals("setColor " + Color.GRAY);
+                assert g.hasPaintedTheDeadSnake();
             }),
             new Test("The snake moves towards its direction", List.of(
                     () ->
@@ -183,6 +177,27 @@ public final class Tests
     public static final class FakeGraphics extends Graphics
     {
         public final List<String> logs = new LinkedList<>();
+
+        public boolean hasPaintedTheGameBackground()
+        {
+            return logs.subList(0, 2).equals(List.of(
+                    "setColor " + Color.BLACK,
+                    String.format("fillRect %d %d %d %d", 0, 0, 500, 500)));
+        }
+
+        public boolean hasPaintedTheSnake(SnakeGame.Snake snake)
+        {
+            return logs.subList(2, 4).equals(List.of(
+                    "setColor " + Color.WHITE,
+                    String.format(
+                            "fillRect %d %d %d %d",
+                            snake.xHead, snake.yHead, 10, 10)));
+        }
+
+        public boolean hasPaintedTheDeadSnake()
+        {
+            return logs.get(0).equals("setColor " + Color.GRAY);
+        }
 
         @Override
         public Graphics create()

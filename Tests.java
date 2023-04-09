@@ -150,12 +150,18 @@ public final class Tests
             }),
             new Test("A dead snake doesn't move", () ->
             {
-                var snake = new SnakeGame.Snake(
-                        1, 1, 10, SnakeGame.Direction.EAST, false);
+                var snake = deadSnake(1, 1);
                 var game = new SnakeGame.Game(3, snake);
                 game.update();
                 assert snake.xHead == 1;
                 assert snake.yHead == 1;
+            }),
+            new Test("A player can't change the direction of a dead snake", () ->
+            {
+                var snake = deadSnake(SnakeGame.Direction.NORTH);
+                snake.keyPressed(pressDownArrowKey());
+                snake.update(0);
+                assert snake.currentDirection == SnakeGame.Direction.NORTH;
             }));
 
     public static KeyEvent pressLeftArrowKey()
@@ -180,6 +186,17 @@ public final class Tests
     {
         return new KeyEvent(
                 new Component() {}, 0, 0, 0, KeyEvent.VK_UP, '\0');
+    }
+
+    public static SnakeGame.Snake deadSnake(int xHead, int yHead)
+    {
+        return new SnakeGame.Snake(
+                xHead, yHead, 10, SnakeGame.Direction.EAST, false);
+    }
+
+    public static SnakeGame.Snake deadSnake(SnakeGame.Direction direction)
+    {
+        return new SnakeGame.Snake(0, 0, 10, direction, false);
     }
 
     public static final class FakeGraphics extends Graphics

@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Optional;
 
+import static java.awt.event.KeyEvent.*;
+
 public final class SnakeGame
 {
     public static void main(String[] args)
@@ -137,8 +139,10 @@ public final class SnakeGame
 
         private void setNextDirection(Direction direction)
         {
-            if (direction.isNotOpposite(currentDirection))
+            if (isAlive && direction != currentDirection.opposite())
+            {
                 nextDirection = direction;
+            }
         }
 
         private boolean wantsTurn()
@@ -216,19 +220,14 @@ public final class SnakeGame
 
         private static Optional<Direction> keyEvent(KeyEvent e)
         {
-            return switch (e.getKeyCode())
+            return Optional.ofNullable(switch (e.getKeyCode())
                     {
-                        case KeyEvent.VK_UP -> Optional.of(Direction.NORTH);
-                        case KeyEvent.VK_DOWN -> Optional.of(Direction.SOUTH);
-                        case KeyEvent.VK_LEFT -> Optional.of(Direction.WEST);
-                        case KeyEvent.VK_RIGHT -> Optional.of(Direction.EAST);
-                        default -> Optional.empty();
-                    };
-        }
-
-        private boolean isNotOpposite(Direction direction)
-        {
-            return valueOf(name()) != direction.opposite();
+                        case VK_UP -> NORTH;
+                        case VK_DOWN -> SOUTH;
+                        case VK_LEFT -> WEST;
+                        case VK_RIGHT -> EAST;
+                        default -> null;
+                    });
         }
 
         private Direction opposite()

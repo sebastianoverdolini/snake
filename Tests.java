@@ -31,7 +31,7 @@ public final class Tests
                 snake.render(g);
                 assert g.hasPaintedTheDeadSnake();
             }),
-            new Test("The snake moves towards its direction", List.of(
+            new Test("The snake crawls forward when the game is updated ", List.of(
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(

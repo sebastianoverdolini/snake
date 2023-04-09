@@ -104,45 +104,35 @@ public final class SnakeGame
         {
             if (isAlive())
             {
-                if (wantsTurn() && canTurn())
-                    turn();
-                slither(frameSize);
+                if (wantsTurn() && hasCompletedTheCurrentCrawl())
+                {
+                    currentDirection = nextDirection;
+                    nextDirection = null;
+                }
+                switch (currentDirection)
+                {
+                    case NORTH ->
+                    {
+                        if (isNearNorthWall()) die();
+                        else yHead--;
+                    }
+                    case SOUTH ->
+                    {
+                        if (isNearSouthWall(frameSize)) die();
+                        else yHead++;
+                    }
+                    case WEST ->
+                    {
+                        if (isNearWestWall()) die();
+                        else xHead--;
+                    }
+                    case EAST ->
+                    {
+                        if (isNearEastWall(frameSize)) die();
+                        else xHead++;
+                    }
+                }
             }
-        }
-
-        private void slither(int frameSize)
-        {
-            switch (currentDirection)
-            {
-                case NORTH -> goNorth();
-                case SOUTH -> goSouth(frameSize);
-                case WEST -> goWest();
-                case EAST -> goEast(frameSize);
-            }
-        }
-
-        private void goNorth()
-        {
-            if (yHead == 0) die();
-            else yHead--;
-        }
-
-        private void goSouth(int frameSize)
-        {
-            if (yHead + size == frameSize) die();
-            else yHead++;
-        }
-
-        private void goWest()
-        {
-            if (xHead == 0) die();
-            else xHead--;
-        }
-
-        private void goEast(int frameSize)
-        {
-            if (xHead + size == frameSize) die();
-            else xHead++;
         }
 
         private boolean wantsTurn()
@@ -150,15 +140,29 @@ public final class SnakeGame
             return nextDirection != null;
         }
 
-        private boolean canTurn()
+        private boolean hasCompletedTheCurrentCrawl()
         {
             return xHead % size == 0 && yHead % size == 0;
         }
 
-        private void turn()
+        private boolean isNearNorthWall()
         {
-            currentDirection = nextDirection;
-            nextDirection = null;
+            return yHead == 0;
+        }
+
+        private boolean isNearSouthWall(int frameSize)
+        {
+            return yHead + size == frameSize;
+        }
+
+        private boolean isNearWestWall()
+        {
+            return xHead == 0;
+        }
+
+        private boolean isNearEastWall(int frameSize)
+        {
+            return xHead + size == frameSize;
         }
 
         private void die()

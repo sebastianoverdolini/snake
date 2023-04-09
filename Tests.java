@@ -27,9 +27,10 @@ public final class Tests
             new Test("A dead snake is gray", () ->
             {
                 var snake = new SnakeGame.Snake(0, 0, 10, null, false);
+                var game = new SnakeGame.Game(100, snake);
                 var g = new FakeGraphics();
-                snake.render(g);
-                assert g.hasPaintedTheDeadSnake();
+                game.render(g);
+                assert g.hasPaintedTheDeadSnake(snake);
             }),
             new Test("The snake crawls forward when the game is updated ", List.of(
                     () ->
@@ -160,7 +161,7 @@ public final class Tests
             {
                 var snake = deadSnake(SnakeGame.Direction.NORTH);
                 snake.keyPressed(pressDownArrowKey());
-                snake.update(0);
+                new SnakeGame.Game(100, snake).update();
                 assert snake.currentDirection == SnakeGame.Direction.NORTH;
             }));
 
@@ -219,9 +220,13 @@ public final class Tests
                             snake.xHead, snake.yHead, 10, 10)));
         }
 
-        public boolean hasPaintedTheDeadSnake()
+        public boolean hasPaintedTheDeadSnake(SnakeGame.Snake snake)
         {
-            return logs.get(0).equals("setColor " + Color.GRAY);
+            return logs.subList(2, 4).equals(List.of(
+                    "setColor " + Color.GRAY,
+                    String.format(
+                            "fillRect %d %d %d %d",
+                            snake.xHead, snake.yHead, 10, 10)));
         }
 
         @Override

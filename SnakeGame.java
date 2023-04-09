@@ -135,6 +135,12 @@ public final class SnakeGame
             }
         }
 
+        private void setNextDirection(Direction direction)
+        {
+            if (direction.isNotOpposite(currentDirection))
+                nextDirection = direction;
+        }
+
         private boolean wantsTurn()
         {
             return nextDirection != null;
@@ -187,9 +193,9 @@ public final class SnakeGame
         @Override
         public void keyPressed(KeyEvent e)
         {
-            if (Direction.keyEvent(e).isPresent() &&
-                    Direction.keyEvent(e).get().isNotOpposite(currentDirection))
-                nextDirection = Direction.keyEvent(e).get();
+            Direction.keyEvent(e).ifPresentOrElse(
+                    this::setNextDirection,
+                    () -> {});
         }
 
         @Override

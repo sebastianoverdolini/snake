@@ -108,25 +108,33 @@ public final class Tests
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.NORTH);
+                        var game = new SnakeGame.Game(100, snake);
                         snake.keyPressed(pressDownArrowKey());
+                        game.update();
                         assert snake.currentDirection == SnakeGame.Direction.NORTH;
                     },
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.SOUTH);
+                        var game = new SnakeGame.Game(100, snake);
                         snake.keyPressed(pressUpArrowKey());
+                        game.update();
                         assert snake.currentDirection == SnakeGame.Direction.SOUTH;
                     },
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.WEST);
+                        var game = new SnakeGame.Game(100, snake);
                         snake.keyPressed(pressRightArrowKey());
+                        game.update();
                         assert snake.currentDirection == SnakeGame.Direction.WEST;
                     },
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.EAST);
+                        var game = new SnakeGame.Game(100, snake);
                         snake.keyPressed(pressLeftArrowKey());
+                        game.update();
                         assert snake.currentDirection == SnakeGame.Direction.EAST;
                     }
             )),

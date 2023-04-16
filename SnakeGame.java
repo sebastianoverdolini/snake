@@ -33,7 +33,7 @@ public final class SnakeGame
         frame.add(panel);
         frame.pack();
         frame.setVisible(true);
-        new Timer(10, e -> {
+        new Timer(5, e -> {
             game.update();
             frame.repaint();
         }).start();

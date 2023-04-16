@@ -65,19 +65,21 @@ public final class SnakeGame
 
         private static void renderBackground(Graphics g, int frameSize, int snakeSize)
         {
-            g.setColor(Color.BLACK);
+            var darkGrassColor = new Color(128, 185, 24);
+            var lightGrassColor = new Color(170, 204, 0);
+            g.setColor(darkGrassColor);
             for (int i = 0; i < frameSize; i = i + snakeSize)
             {
                 for (int j = 0; j < frameSize; j = j + snakeSize)
                 {
                     g.fillRect(j, i, snakeSize, snakeSize);
-                    if (g.getColor().equals(Color.BLACK))
+                    if (g.getColor().equals(darkGrassColor))
                     {
-                        g.setColor(Color.WHITE);
+                        g.setColor(lightGrassColor);
                     }
                     else
                     {
-                        g.setColor(Color.BLACK);
+                        g.setColor(darkGrassColor);
                     }
                 }
             }
@@ -201,10 +203,7 @@ public final class SnakeGame
 
         public void render(Graphics g)
         {
-            if (isAlive())
-                g.setColor(Color.BLUE);
-            else
-                g.setColor(Color.GRAY);
+            g.setColor(isAlive() ? new Color(84, 66, 142) : Color.GRAY);
             g.fillRect(xHead, yHead, size, size);
         }
 

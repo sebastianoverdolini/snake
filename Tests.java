@@ -15,13 +15,13 @@ public final class Tests
                 var g = new FakeGraphics();
                 game.render(g);
                 assert g.logs.subList(0, 8).equals(List.of(
-                        "setColor " + Color.BLACK,
+                        "setColor " + new Color(128, 185, 24),
                         String.format("fillRect %d %d %d %d", 0, 0, 2, 2),
-                        "setColor " + Color.WHITE,
+                        "setColor " + new Color(170, 204, 0),
                         String.format("fillRect %d %d %d %d", 2, 0, 2, 2),
-                        "setColor " + Color.BLACK,
+                        "setColor " + new Color(128, 185, 24),
                         String.format("fillRect %d %d %d %d", 0, 2, 2, 2),
-                        "setColor " + Color.WHITE,
+                        "setColor " + new Color(170, 204, 0),
                         String.format("fillRect %d %d %d %d", 2, 2, 2, 2)));
             }),
             new Test("A game paints the snake when rendered", () ->
@@ -216,7 +216,7 @@ public final class Tests
         public boolean hasPaintedTheSnake(SnakeGame.Snake snake)
         {
             return logs.subList(logs.size() - 2, logs.size()).equals(List.of(
-                    "setColor " + Color.BLUE,
+                    "setColor " + new Color(84, 66, 142),
                     String.format(
                             "fillRect %d %d %d %d",
                             snake.xHead, snake.yHead, 10, 10)));

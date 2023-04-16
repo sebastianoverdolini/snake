@@ -11,10 +11,18 @@ public final class Tests
             new Test("A game paints the background when rendered", () ->
             {
                 var game = new SnakeGame.Game(
-                        500, SnakeGame.Snake.alive(0, 0, 10, null));
+                        4, SnakeGame.Snake.alive(0, 0, 2, null));
                 var g = new FakeGraphics();
                 game.render(g);
-                assert g.hasPaintedTheGameBackground();
+                assert g.logs.subList(0, 8).equals(List.of(
+                        "setColor " + Color.BLACK,
+                        String.format("fillRect %d %d %d %d", 0, 0, 2, 2),
+                        "setColor " + Color.WHITE,
+                        String.format("fillRect %d %d %d %d", 2, 0, 2, 2),
+                        "setColor " + Color.BLACK,
+                        String.format("fillRect %d %d %d %d", 0, 2, 2, 2),
+                        "setColor " + Color.WHITE,
+                        String.format("fillRect %d %d %d %d", 2, 2, 2, 2)));
             }),
             new Test("A game paints the snake when rendered", () ->
             {
@@ -203,17 +211,11 @@ public final class Tests
     public static final class FakeGraphics extends Graphics
     {
         public final List<String> logs = new LinkedList<>();
-
-        public boolean hasPaintedTheGameBackground()
-        {
-            return logs.subList(0, 2).equals(List.of(
-                    "setColor " + Color.BLACK,
-                    String.format("fillRect %d %d %d %d", 0, 0, 500, 500)));
-        }
+        private Color color;
 
         public boolean hasPaintedTheSnake(SnakeGame.Snake snake)
         {
-            return logs.subList(2, 4).equals(List.of(
+            return logs.subList(logs.size() - 2, logs.size()).equals(List.of(
                     "setColor " + Color.BLUE,
                     String.format(
                             "fillRect %d %d %d %d",
@@ -222,7 +224,7 @@ public final class Tests
 
         public boolean hasPaintedTheDeadSnake(SnakeGame.Snake snake)
         {
-            return logs.subList(2, 4).equals(List.of(
+            return logs.subList(logs.size() - 2, logs.size()).equals(List.of(
                     "setColor " + Color.GRAY,
                     String.format(
                             "fillRect %d %d %d %d",
@@ -244,12 +246,13 @@ public final class Tests
         @Override
         public Color getColor()
         {
-            throw new UnsupportedOperationException();
+            return color;
         }
 
         @Override
         public void setColor(Color c)
         {
+            color = c;
             logs.add("setColor " + c);
         }
 

@@ -59,14 +59,28 @@ public final class SnakeGame
 
         public void render(Graphics g)
         {
-            renderBackground(g, frameSize);
+            renderBackground(g, frameSize, snake.size);
             snake.render(g);
         }
 
-        private static void renderBackground(Graphics g, int frameSize)
+        private static void renderBackground(Graphics g, int frameSize, int snakeSize)
         {
             g.setColor(Color.BLACK);
-            g.fillRect(0, 0, frameSize, frameSize);
+            for (int i = 0; i < frameSize; i = i + snakeSize)
+            {
+                for (int j = 0; j < frameSize; j = j + snakeSize)
+                {
+                    g.fillRect(j, i, snakeSize, snakeSize);
+                    if (g.getColor().equals(Color.BLACK))
+                    {
+                        g.setColor(Color.WHITE);
+                    }
+                    else
+                    {
+                        g.setColor(Color.BLACK);
+                    }
+                }
+            }
         }
     }
 

@@ -214,7 +214,7 @@ public final class Tests
         public boolean hasPaintedTheSnake(SnakeGame.Snake snake)
         {
             return logs.subList(2, 4).equals(List.of(
-                    "setColor " + Color.WHITE,
+                    "setColor " + Color.BLUE,
                     String.format(
                             "fillRect %d %d %d %d",
                             snake.xHead, snake.yHead, 10, 10)));

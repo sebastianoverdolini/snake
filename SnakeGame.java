@@ -188,7 +188,7 @@ public final class SnakeGame
         public void render(Graphics g)
         {
             if (isAlive())
-                g.setColor(Color.WHITE);
+                g.setColor(Color.BLUE);
             else
                 g.setColor(Color.GRAY);
             g.fillRect(xHead, yHead, size, size);

@@ -15,7 +15,7 @@ public final class Tests
                 assert game.snake.yHead == 30;
                 assert game.snake.currentDirection == SnakeGame.Direction.EAST;
             }),
-            new Test("A game paints the background when rendered", () ->
+            new Test("The game screen's background is a dark and light green grid", () ->
             {
                 var game = new SnakeGame.Game(
                         4, SnakeGame.Snake.alive(0, 0, 2, null));
@@ -31,23 +31,31 @@ public final class Tests
                         "setColor " + SnakeGame.Game.lightGrassColor,
                         String.format("fillRect %d %d %d %d", 2, 2, 2, 2)));
             }),
-            new Test("A game paints the snake when rendered", () ->
+            new Test("The alive snake is rendered as a purple rectangle", () ->
             {
                 var snake = SnakeGame.Snake.alive(1, 2, 10, null);
                 var game = new SnakeGame.Game(100, snake);
                 var g = new FakeGraphics();
                 game.render(g);
-                assert g.hasPaintedTheSnake(snake);
+                assert g.logs.subList(g.logs.size() - 2, g.logs.size()).equals(List.of(
+                        "setColor " + new Color(84, 66, 142),
+                        String.format(
+                                "fillRect %d %d %d %d",
+                                snake.xHead, snake.yHead, 10, 10)));
             }),
-            new Test("A dead snake is gray", () ->
+            new Test("The dead snake is rendered as a gray rectangle", () ->
             {
                 var snake = new SnakeGame.Snake(0, 0, 10, null, false);
                 var game = new SnakeGame.Game(100, snake);
                 var g = new FakeGraphics();
                 game.render(g);
-                assert g.hasPaintedTheDeadSnake(snake);
+                assert g.logs.subList(g.logs.size() - 2, g.logs.size()).equals(List.of(
+                        "setColor " + Color.GRAY,
+                        String.format(
+                                "fillRect %d %d %d %d",
+                                snake.xHead, snake.yHead, 10, 10)));
             }),
-            new Test("The snake continuously crawls towards its direction ", List.of(
+            new Test("The alive snake keeps crawling towards its current direction if it doesn't want to turn", List.of(
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(
@@ -84,7 +92,7 @@ public final class Tests
                         assert snake.yHead == 1;
                         assert snake.currentDirection == SnakeGame.Direction.EAST;
                     })),
-            new Test("The snake turns only when it completely fills a cell ", List.of(
+            new Test("The alive snake turns only when its head has completely filled the tile", List.of(
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(
@@ -111,7 +119,7 @@ public final class Tests
                         assert snake.xHead == 1;
                         assert snake.yHead == 2;
                     })),
-            new Test("The snake keeps its direction when a player presses an unknown button", () ->
+            new Test("The alive snake doesn't change direction when the player presses an unknown button", () ->
             {
                 var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.EAST);
                 snake.keyPressed(new KeyEvent(
@@ -120,7 +128,7 @@ public final class Tests
                         }, 0, 0, 0, KeyEvent.VK_B, '\0'));
                 assert snake.currentDirection == SnakeGame.Direction.EAST;
             }),
-            new Test("The snake keeps its direction when a player tries to reverse it", List.of(
+            new Test("The alive snake can't reverse its direction", List.of(
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.NORTH);
@@ -154,7 +162,7 @@ public final class Tests
                         assert snake.currentDirection == SnakeGame.Direction.EAST;
                     }
             )),
-            new Test("The snake dies when it hits a wall", () ->
+            new Test("The alive snake dies when it hits a wall", () ->
             {
                 for (var direction : SnakeGame.Direction.values())
                 {
@@ -164,7 +172,7 @@ public final class Tests
                     assert !snake.isAlive();
                 }
             }),
-            new Test("A dead snake doesn't move", () ->
+            new Test("A dead snake can't move", () ->
             {
                 var snake = deadSnake(1, 1);
                 var game = new SnakeGame.Game(3, snake);
@@ -172,7 +180,7 @@ public final class Tests
                 assert snake.xHead == 1;
                 assert snake.yHead == 1;
             }),
-            new Test("A player can't change the direction of a dead snake", () ->
+            new Test("A dead snake can't change its current direction", () ->
             {
                 var snake = deadSnake(SnakeGame.Direction.NORTH);
                 snake.keyPressed(pressDownArrowKey());
@@ -219,24 +227,6 @@ public final class Tests
     {
         public final List<String> logs = new LinkedList<>();
         private Color color;
-
-        public boolean hasPaintedTheSnake(SnakeGame.Snake snake)
-        {
-            return logs.subList(logs.size() - 2, logs.size()).equals(List.of(
-                    "setColor " + new Color(84, 66, 142),
-                    String.format(
-                            "fillRect %d %d %d %d",
-                            snake.xHead, snake.yHead, 10, 10)));
-        }
-
-        public boolean hasPaintedTheDeadSnake(SnakeGame.Snake snake)
-        {
-            return logs.subList(logs.size() - 2, logs.size()).equals(List.of(
-                    "setColor " + Color.GRAY,
-                    String.format(
-                            "fillRect %d %d %d %d",
-                            snake.xHead, snake.yHead, 10, 10)));
-        }
 
         @Override
         public Graphics create()

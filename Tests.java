@@ -8,6 +8,13 @@ import java.util.List;
 public final class Tests
 {
     public final static List<Test> tests = List.of(
+            new Test("A new game has the snake placed in the center and directed towards EAST", () ->
+            {
+                var game = SnakeGame.Game.newGame(70, 10);
+                assert game.snake.xHead == 30;
+                assert game.snake.yHead == 30;
+                assert game.snake.currentDirection == SnakeGame.Direction.EAST;
+            }),
             new Test("A game paints the background when rendered", () ->
             {
                 var game = new SnakeGame.Game(

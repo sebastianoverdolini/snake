@@ -12,14 +12,13 @@ public final class SnakeGame
     {
         final var frameSize = 600;
         final var frame = new JFrame("Snake");
-        var snake = Snake.alive(0, 0, 40, Direction.EAST);
-        var game = new Game(frameSize, snake);
+        var game = Game.newGame(frameSize, 40);
         frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setFocusable(true);
-        frame.addKeyListener(snake);
+        frame.addKeyListener(game.snake);
         var panel = new JPanel()
         {
             @Override
@@ -42,7 +41,7 @@ public final class SnakeGame
     public static final class Game
     {
         private final int frameSize;
-        private final Snake snake;
+        public final Snake snake;
 
         public Game(
                 int frameSize,
@@ -50,6 +49,17 @@ public final class SnakeGame
         {
             this.frameSize = frameSize;
             this.snake = snake;
+        }
+
+        public static Game newGame(int frameSize, int tileSize)
+        {
+            return new Game(
+                    frameSize,
+                    Snake.alive(
+                            ((frameSize / tileSize) / 2) * tileSize,
+                            ((frameSize / tileSize) / 2) * tileSize,
+                            tileSize,
+                            Direction.EAST));
         }
 
         public void update()

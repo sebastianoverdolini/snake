@@ -73,10 +73,11 @@ public final class SnakeGame
             snake.render(g);
         }
 
+        public static Color darkGrassColor = new Color(128, 185, 24);
+        public static Color lightGrassColor = new Color(170, 204, 0);
+
         private static void renderBackground(Graphics g, int frameSize, int snakeSize)
         {
-            var darkGrassColor = new Color(128, 185, 24);
-            var lightGrassColor = new Color(170, 204, 0);
             g.setColor(darkGrassColor);
             for (int i = 0; i < frameSize; i = i + snakeSize)
             {

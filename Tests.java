@@ -4,6 +4,7 @@ import java.awt.image.ImageObserver;
 import java.text.AttributedCharacterIterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public final class Tests
 {
@@ -449,16 +450,21 @@ public final class Tests
 
     public static void main(String[] args)
     {
-        if (tests.stream().allMatch(Test::succeeds))
-            System.out.println("SUCCESS");
-        else
+        var success = true;
+        for (var test : tests)
         {
-            tests.stream()
-                    .filter(Test::fails)
-                    .map(test -> "FAILED: " + test.description)
-                    .forEach(System.err::println);
-            System.exit(1);
+            try
+            {
+                test.run();
+            }
+            catch (AssertionError error)
+            {
+                success = false;
+                System.out.println("FAILED: " + test.description);
+                Optional.ofNullable(error.getMessage()).ifPresent(System.out::println);
+            }
         }
+        System.exit(success ? 0 : 1);
     }
 
     public static final class Test
@@ -477,22 +483,9 @@ public final class Tests
             this(description, () -> tests.forEach(Runnable::run));
         }
 
-        public boolean succeeds()
+        public void run()
         {
-            try
-            {
-                test.run();
-                return true;
-            }
-            catch (AssertionError e)
-            {
-                return false;
-            }
-        }
-
-        public boolean fails()
-        {
-            return !succeeds();
+            test.run();
         }
     }
 }

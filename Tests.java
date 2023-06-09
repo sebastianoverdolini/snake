@@ -170,6 +170,8 @@ public final class Tests
                     var game = new SnakeGame.Game(10, snake);
                     game.update();
                     assert !snake.isAlive();
+                    assert snake.xHead == 0;
+                    assert snake.yHead == 0;
                 }
             }),
             new Test("A dead snake can't move", () ->

@@ -12,7 +12,7 @@ public final class SnakeGame
     {
         final var frameSize = 600;
         final var frame = new JFrame("Snake");
-        var game = Game.newGame(frameSize, 40);
+        var game = new Game(frameSize, 40);
         frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -51,15 +51,14 @@ public final class SnakeGame
             this.snake = snake;
         }
 
-        public static Game newGame(int frameSize, int tileSize)
+        public Game(int frameSize, int tileSize)
         {
-            return new Game(
-                    frameSize,
-                    Snake.alive(
-                            ((frameSize / tileSize) / 2) * tileSize,
-                            ((frameSize / tileSize) / 2) * tileSize,
-                            tileSize,
-                            Direction.EAST));
+            this.frameSize = frameSize;
+            this.snake = Snake.alive(
+                    ((frameSize / tileSize) / 2) * tileSize,
+                    ((frameSize / tileSize) / 2) * tileSize,
+                    tileSize,
+                    Direction.EAST);
         }
 
         public void update()

@@ -11,15 +11,14 @@ public final class Tests
     public final static List<Test> tests = List.of(
             new Test("A new game has the snake placed in the center and directed towards EAST", () ->
             {
-                var game = SnakeGame.Game.newGame(70, 10);
+                var game = new SnakeGame.Game(70, 10);
                 assert game.snake.xHead == 30;
                 assert game.snake.yHead == 30;
                 assert game.snake.currentDirection == SnakeGame.Direction.EAST;
             }),
             new Test("The game screen's background is a dark and light green grid", () ->
             {
-                var game = new SnakeGame.Game(
-                        4, SnakeGame.Snake.alive(0, 0, 2, null));
+                var game = new SnakeGame.Game(4, 2);
                 var g = new FakeGraphics();
                 game.render(g);
                 assert g.logs.subList(0, 8).equals(List.of(

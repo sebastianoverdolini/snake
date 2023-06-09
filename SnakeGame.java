@@ -213,6 +213,11 @@ public final class SnakeGame
 
         public void render(Graphics g)
         {
+            renderHead(g);
+        }
+
+        private void renderHead(Graphics g)
+        {
             g.setColor(isAlive() ? new Color(84, 66, 142) : Color.GRAY);
             g.fillRect(xHead, yHead, size, size);
         }

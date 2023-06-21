@@ -43,14 +43,6 @@ public final class SnakeGame
         private final int frameSize;
         public final Snake snake;
 
-        public Game(
-                int frameSize,
-                Snake snake)
-        {
-            this.frameSize = frameSize;
-            this.snake = snake;
-        }
-
         public Game(int frameSize, int tileSize)
         {
             this.frameSize = frameSize;

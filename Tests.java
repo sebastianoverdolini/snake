@@ -34,10 +34,9 @@ public final class Tests
             new Test("The alive snake is rendered as a purple rectangle", () ->
             {
                 var snake = SnakeGame.Snake.alive(1, 2, 10, null);
-                var game = new SnakeGame.Game(100, snake);
                 var g = new FakeGraphics();
-                game.render(g);
-                assert g.logs.subList(g.logs.size() - 2, g.logs.size()).equals(List.of(
+                snake.render(g);
+                assert g.logs.equals(List.of(
                         "setColor " + new Color(84, 66, 142),
                         String.format(
                                 "fillRect %d %d %d %d",
@@ -46,10 +45,9 @@ public final class Tests
             new Test("The dead snake is rendered as a gray rectangle", () ->
             {
                 var snake = new SnakeGame.Snake(0, 0, 10, null, false);
-                var game = new SnakeGame.Game(100, snake);
                 var g = new FakeGraphics();
-                game.render(g);
-                assert g.logs.subList(g.logs.size() - 2, g.logs.size()).equals(List.of(
+                snake.render(g);
+                assert g.logs.equals(List.of(
                         "setColor " + Color.GRAY,
                         String.format(
                                 "fillRect %d %d %d %d",
@@ -60,7 +58,7 @@ public final class Tests
                     {
                         var snake = SnakeGame.Snake.alive(
                                 1, 1, 10, SnakeGame.Direction.NORTH);
-                        new SnakeGame.Game(3, snake).update();
+                        snake.update(3);
                         assert snake.xHead == 1;
                         assert snake.yHead == 0;
                         assert snake.currentDirection == SnakeGame.Direction.NORTH;
@@ -69,7 +67,7 @@ public final class Tests
                     {
                         var snake = SnakeGame.Snake.alive(
                                 1, 1, 10, SnakeGame.Direction.SOUTH);
-                        new SnakeGame.Game(3, snake).update();
+                        snake.update(3);
                         assert snake.xHead == 1;
                         assert snake.yHead == 2;
                         assert snake.currentDirection == SnakeGame.Direction.SOUTH;
@@ -78,7 +76,7 @@ public final class Tests
                     {
                         var snake = SnakeGame.Snake.alive(
                                 1, 1, 10, SnakeGame.Direction.WEST);
-                        new SnakeGame.Game(3, snake).update();
+                        snake.update(3);
                         assert snake.xHead == 0;
                         assert snake.yHead == 1;
                         assert snake.currentDirection == SnakeGame.Direction.WEST;
@@ -87,7 +85,7 @@ public final class Tests
                     {
                         var snake = SnakeGame.Snake.alive(
                                 1, 1, 10, SnakeGame.Direction.EAST);
-                        new SnakeGame.Game(3, snake).update();
+                        snake.update(3);
                         assert snake.xHead == 2;
                         assert snake.yHead == 1;
                         assert snake.currentDirection == SnakeGame.Direction.EAST;
@@ -97,12 +95,11 @@ public final class Tests
                     {
                         var snake = SnakeGame.Snake.alive(
                                 1, 0, 2, SnakeGame.Direction.EAST);
-                        var game = new SnakeGame.Game(6, snake);
                         snake.nextDirection = SnakeGame.Direction.SOUTH;
-                        game.update();
+                        snake.update(6);
                         assert snake.xHead == 2;
                         assert snake.yHead == 0;
-                        game.update();
+                        snake.update(6);
                         assert snake.xHead == 2;
                         assert snake.yHead == 1;
                     },
@@ -110,12 +107,11 @@ public final class Tests
                     {
                         var snake = SnakeGame.Snake.alive(
                                 0, 1, 2, SnakeGame.Direction.SOUTH);
-                        var game = new SnakeGame.Game(6, snake);
                         snake.nextDirection = SnakeGame.Direction.EAST;
-                        game.update();
+                        snake.update(6);
                         assert snake.xHead == 0;
                         assert snake.yHead == 2;
-                        game.update();
+                        snake.update(6);
                         assert snake.xHead == 1;
                         assert snake.yHead == 2;
                     })),
@@ -132,33 +128,29 @@ public final class Tests
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.NORTH);
-                        var game = new SnakeGame.Game(100, snake);
                         snake.keyPressed(pressDownArrowKey());
-                        game.update();
+                        snake.update(100);
                         assert snake.currentDirection == SnakeGame.Direction.NORTH;
                     },
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.SOUTH);
-                        var game = new SnakeGame.Game(100, snake);
                         snake.keyPressed(pressUpArrowKey());
-                        game.update();
+                        snake.update(100);
                         assert snake.currentDirection == SnakeGame.Direction.SOUTH;
                     },
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.WEST);
-                        var game = new SnakeGame.Game(100, snake);
                         snake.keyPressed(pressRightArrowKey());
-                        game.update();
+                        snake.update(100);
                         assert snake.currentDirection == SnakeGame.Direction.WEST;
                     },
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(0, 0, 10, SnakeGame.Direction.EAST);
-                        var game = new SnakeGame.Game(100, snake);
                         snake.keyPressed(pressLeftArrowKey());
-                        game.update();
+                        snake.update(100);
                         assert snake.currentDirection == SnakeGame.Direction.EAST;
                     }
             )),
@@ -167,8 +159,7 @@ public final class Tests
                 for (var direction : SnakeGame.Direction.values())
                 {
                     var snake = SnakeGame.Snake.alive(0, 0, 10, direction);
-                    var game = new SnakeGame.Game(10, snake);
-                    game.update();
+                    snake.update(10);
                     assert !snake.isAlive();
                     assert snake.xHead == 0;
                     assert snake.yHead == 0;
@@ -177,8 +168,7 @@ public final class Tests
             new Test("A dead snake can't move", () ->
             {
                 var snake = deadSnake(1, 1);
-                var game = new SnakeGame.Game(3, snake);
-                game.update();
+                snake.update(3);
                 assert snake.xHead == 1;
                 assert snake.yHead == 1;
             }),
@@ -186,7 +176,7 @@ public final class Tests
             {
                 var snake = deadSnake(SnakeGame.Direction.NORTH);
                 snake.keyPressed(pressDownArrowKey());
-                new SnakeGame.Game(100, snake).update();
+                snake.update(100);
                 assert snake.currentDirection == SnakeGame.Direction.NORTH;
             }));
 

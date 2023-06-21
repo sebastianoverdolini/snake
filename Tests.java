@@ -42,9 +42,7 @@ public final class Tests
                 snake.render(g);
                 assert g.logs.equals(List.of(
                         "setColor " + new Color(84, 66, 142),
-                        String.format(
-                                "fillRect %d %d %d %d",
-                                snake.xHead, snake.yHead, 10, 10)));
+                        "fillRect 1 2 10 10"));
             }),
             new Test("The dead snake is rendered as a gray rectangle", () ->
             {

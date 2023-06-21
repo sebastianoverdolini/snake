@@ -18,18 +18,22 @@ public final class Tests
             }),
             new Test("The game screen's background is a dark and light green grid", () ->
             {
-                var game = new SnakeGame.Game(4, 2);
+                var game = new SnakeGame.Game(6, 2);
                 var g = new FakeGraphics();
                 game.render(g);
-                assert g.logs.subList(0, 8).equals(List.of(
+                assert g.logs.subList(0, 12).equals(List.of(
                         "setColor " + SnakeGame.Game.darkGrassColor,
                         String.format("fillRect %d %d %d %d", 0, 0, 2, 2),
                         "setColor " + SnakeGame.Game.lightGrassColor,
                         String.format("fillRect %d %d %d %d", 2, 0, 2, 2),
                         "setColor " + SnakeGame.Game.darkGrassColor,
-                        String.format("fillRect %d %d %d %d", 0, 2, 2, 2),
+                        String.format("fillRect %d %d %d %d", 4, 0, 2, 2),
                         "setColor " + SnakeGame.Game.lightGrassColor,
-                        String.format("fillRect %d %d %d %d", 2, 2, 2, 2)));
+                        String.format("fillRect %d %d %d %d", 0, 2, 2, 2),
+                        "setColor " + SnakeGame.Game.darkGrassColor,
+                        String.format("fillRect %d %d %d %d", 2, 2, 2, 2),
+                        "setColor " + SnakeGame.Game.lightGrassColor,
+                        String.format("fillRect %d %d %d %d", 4, 2, 2, 2)));
             }),
             new Test("The alive snake is rendered as a purple rectangle", () ->
             {

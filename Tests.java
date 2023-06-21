@@ -11,9 +11,9 @@ public final class Tests
     public final static List<Test> tests = List.of(
             new Test("A new game has the snake placed in the center and directed towards EAST", () ->
             {
-                var game = new SnakeGame.Game(70, 10);
-                assert game.snake.xHead == 30;
-                assert game.snake.yHead == 30;
+                var game = new SnakeGame.Game(6, 2);
+                assert game.snake.xHead == 2;
+                assert game.snake.yHead == 2;
                 assert game.snake.currentDirection == SnakeGame.Direction.EAST;
             }),
             new Test("The game screen's background is a dark and light green grid", () ->

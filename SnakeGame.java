@@ -47,9 +47,7 @@ public final class SnakeGame
         {
             this.frameSize = frameSize;
             this.snake = Snake.alive(
-                    new Location(
-                            ((frameSize / tileSize) / 2) * tileSize,
-                            ((frameSize / tileSize) / 2) * tileSize),
+                    new Location(0, 0),
                     tileSize,
                     Direction.EAST);
         }
@@ -62,7 +60,7 @@ public final class SnakeGame
         public void render(Graphics g)
         {
             renderBackground(g, frameSize, snake.size);
-            snake.render(g);
+            snake.render(frameSize, g);
         }
 
         public static Color darkGrassColor = new Color(128, 185, 24);
@@ -132,19 +130,19 @@ public final class SnakeGame
                 {
                     case NORTH ->
                     {
-                        if (isNearNorthWall()) die();
+                        if (isNearNorthWall(frameSize)) die();
                         else this.headLocation = new Location(
-                                headLocation.x(), headLocation().y() - 1);
+                                headLocation.x(), headLocation().y() + 1);
                     }
                     case SOUTH ->
                     {
                         if (isNearSouthWall(frameSize)) die();
                         else this.headLocation = new Location(
-                                headLocation.x(), headLocation().y() + 1);
+                                headLocation.x(), headLocation().y() - 1);
                     }
                     case WEST ->
                     {
-                        if (isNearWestWall()) die();
+                        if (isNearWestWall(frameSize)) die();
                         else this.headLocation = new Location(
                                 headLocation.x() - 1, headLocation().y());
                     }
@@ -181,24 +179,24 @@ public final class SnakeGame
             return headLocation.x() % size == 0 && headLocation.y() % size == 0;
         }
 
-        private boolean isNearNorthWall()
+        private boolean isNearNorthWall(int frameSize)
         {
-            return headLocation.y() == 0;
+            return headLocation.y() + (size / 2) == (frameSize / 2);
         }
 
         private boolean isNearSouthWall(int frameSize)
         {
-            return headLocation.y() + size == frameSize;
+            return headLocation.y() - (size / 2) == - (frameSize / 2);
         }
 
-        private boolean isNearWestWall()
+        private boolean isNearWestWall(int frameSize)
         {
-            return headLocation.x() == 0;
+            return headLocation.x() - (size / 2) == - (frameSize / 2);
         }
 
         private boolean isNearEastWall(int frameSize)
         {
-            return headLocation.x() + size == frameSize;
+            return headLocation.x() + (size / 2) == (frameSize / 2);
         }
 
         private void die()
@@ -211,15 +209,14 @@ public final class SnakeGame
             return isAlive;
         }
 
-        public void render(Graphics g)
-        {
-            renderHead(g);
-        }
-
-        private void renderHead(Graphics g)
+        public void render(int frameSize, Graphics g)
         {
             g.setColor(isAlive() ? new Color(84, 66, 142) : Color.GRAY);
-            g.fillRect(headLocation.x(), headLocation().y(), size, size);
+            g.fillRect(
+                    (frameSize / 2) + headLocation.x() - (size / 2),
+                    (frameSize / 2) - headLocation().y() - (size / 2),
+                    size,
+                    size);
         }
 
         @Override

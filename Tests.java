@@ -13,7 +13,7 @@ public final class Tests
             {
                 var game = new SnakeGame.Game(6, 2);
                 assert game.snake.headLocation().equals(
-                        new SnakeGame.Location(2, 2));
+                        new SnakeGame.Location(0, 0));
                 assert game.snake.currentDirection == SnakeGame.Direction.EAST;
             }),
             new Test("The game screen's background is a dark and light green grid", () ->
@@ -35,65 +35,116 @@ public final class Tests
                         "setColor " + SnakeGame.Game.lightGrassColor,
                         String.format("fillRect %d %d %d %d", 4, 2, 2, 2)));
             }),
-            new Test("The alive snake is rendered as a purple rectangle", () ->
-            {
-                var snake = SnakeGame.Snake.alive(new SnakeGame.Location(1, 2), 10, null);
-                var g = new FakeGraphics();
-                snake.render(g);
-                assert g.logs.equals(List.of(
-                        "setColor " + new Color(84, 66, 142),
-                        "fillRect 1 2 10 10"));
-            }),
+            new Test("The alive snake is rendered as a purple rectangle", List.of(
+                    () ->
+                    {
+                        var snake = SnakeGame.Snake.alive(
+                                new SnakeGame.Location(0, 0), 10, null);
+                        var g = new FakeGraphics();
+                        snake.render(100, g);
+                        assert g.logs.equals(List.of(
+                                "setColor " + new Color(84, 66, 142),
+                                "fillRect 45 45 10 10"));
+                    },
+                    () ->
+                    {
+                        var snake = SnakeGame.Snake.alive(
+                                new SnakeGame.Location(1, 0), 10, null);
+                        var g = new FakeGraphics();
+                        snake.render(100, g);
+                        assert g.logs.equals(List.of(
+                                "setColor " + new Color(84, 66, 142),
+                                "fillRect 46 45 10 10"));
+                    },
+                    () ->
+                    {
+                        var snake = SnakeGame.Snake.alive(
+                                new SnakeGame.Location(-1, 0), 10, null);
+                        var g = new FakeGraphics();
+                        snake.render(100, g);
+                        assert g.logs.equals(List.of(
+                                "setColor " + new Color(84, 66, 142),
+                                "fillRect 44 45 10 10"));
+                    },
+                    () ->
+                    {
+                        var snake = SnakeGame.Snake.alive(
+                                new SnakeGame.Location(0, 1), 10, null);
+                        var g = new FakeGraphics();
+                        snake.render(100, g);
+                        assert g.logs.equals(List.of(
+                                "setColor " + new Color(84, 66, 142),
+                                "fillRect 45 44 10 10"));
+                    },
+                    () ->
+                    {
+                        var snake = SnakeGame.Snake.alive(
+                                new SnakeGame.Location(0, -1), 10, null);
+                        var g = new FakeGraphics();
+                        snake.render(100, g);
+                        assert g.logs.equals(List.of(
+                                "setColor " + new Color(84, 66, 142),
+                                "fillRect 45 46 10 10"));
+                    }
+            )),
             new Test("The dead snake is rendered as a gray rectangle", () ->
             {
                 var snake = new SnakeGame.Snake(new SnakeGame.Location(0, 0), 10, null, false);
                 var g = new FakeGraphics();
-                snake.render(g);
+                snake.render(100, g);
                 assert g.logs.get(0).equals("setColor " + Color.GRAY);
             }),
             new Test("The alive snake keeps crawling towards its current direction if it doesn't want to turn", List.of(
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(
-                                new SnakeGame.Location(1, 1), 10, SnakeGame.Direction.NORTH);
-                        snake.update(3);
-                        assert snake.headLocation().equals(
-                                new SnakeGame.Location(1, 0));
-                        assert snake.currentDirection == SnakeGame.Direction.NORTH;
-                    },
-                    () ->
-                    {
-                        var snake = SnakeGame.Snake.alive(
-                                new SnakeGame.Location(1, 1), 10, SnakeGame.Direction.SOUTH);
-                        snake.update(3);
-                        assert snake.headLocation().equals(
-                                new SnakeGame.Location(1, 2));
-                        assert snake.currentDirection == SnakeGame.Direction.SOUTH;
-                    },
-                    () ->
-                    {
-                        var snake = SnakeGame.Snake.alive(
-                                new SnakeGame.Location(1, 1), 10, SnakeGame.Direction.WEST);
-                        snake.update(3);
+                                new SnakeGame.Location(0, 0), 2, SnakeGame.Direction.NORTH);
+                        snake.update(6);
                         assert snake.headLocation().equals(
                                 new SnakeGame.Location(0, 1));
-                        assert snake.currentDirection == SnakeGame.Direction.WEST;
+                        snake.update(6);
+                        assert snake.headLocation().equals(
+                                new SnakeGame.Location(0, 2));
                     },
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(
-                                new SnakeGame.Location(1, 1), 10, SnakeGame.Direction.EAST);
-                        snake.update(3);
+                                new SnakeGame.Location(0, 0), 2, SnakeGame.Direction.SOUTH);
+                        snake.update(6);
                         assert snake.headLocation().equals(
-                                new SnakeGame.Location(2, 1));
-                        assert snake.currentDirection == SnakeGame.Direction.EAST;
+                                new SnakeGame.Location(0, -1));
+                        snake.update(6);
+                        assert snake.headLocation().equals(
+                                new SnakeGame.Location(0, -2));
+                    },
+                    () ->
+                    {
+                        var snake = SnakeGame.Snake.alive(
+                                new SnakeGame.Location(0, 0), 2, SnakeGame.Direction.WEST);
+                        snake.update(6);
+                        assert snake.headLocation().equals(
+                                new SnakeGame.Location(-1, 0));
+                        snake.update(6);
+                        assert snake.headLocation().equals(
+                                new SnakeGame.Location(-2, 0));
+                    },
+                    () ->
+                    {
+                        var snake = SnakeGame.Snake.alive(
+                                new SnakeGame.Location(0, 0), 2, SnakeGame.Direction.EAST);
+                        snake.update(6);
+                        assert snake.headLocation().equals(
+                                new SnakeGame.Location(1, 0));
+                        snake.update(6);
+                        assert snake.headLocation().equals(
+                                new SnakeGame.Location(2, 0));
                     })),
             new Test("The alive snake turns only when its head has completely filled the tile", List.of(
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(
                                 new SnakeGame.Location(1, 0), 2, SnakeGame.Direction.EAST);
-                        snake.nextDirection = SnakeGame.Direction.SOUTH;
+                        snake.nextDirection = SnakeGame.Direction.NORTH;
                         snake.update(6);
                         assert snake.headLocation().equals(
                                 new SnakeGame.Location(2, 0));
@@ -104,7 +155,7 @@ public final class Tests
                     () ->
                     {
                         var snake = SnakeGame.Snake.alive(
-                                new SnakeGame.Location(0, 1), 2, SnakeGame.Direction.SOUTH);
+                                new SnakeGame.Location(0, 1), 2, SnakeGame.Direction.NORTH);
                         snake.nextDirection = SnakeGame.Direction.EAST;
                         snake.update(6);
                         assert snake.headLocation().equals(
@@ -156,17 +207,41 @@ public final class Tests
                         assert snake.currentDirection == SnakeGame.Direction.EAST;
                     }
             )),
-            new Test("The alive snake dies when it hits a wall", () ->
+            new Test("The alive snake dies when it hits the north wall", () ->
             {
-                for (var direction : SnakeGame.Direction.values())
-                {
-                    var snake = SnakeGame.Snake.alive(
-                            new SnakeGame.Location(0, 0), 10, direction);
-                    snake.update(10);
-                    assert !snake.isAlive();
-                    assert snake.headLocation().equals(
-                            new SnakeGame.Location(0, 0));
-                }
+                var snake = SnakeGame.Snake.alive(
+                        new SnakeGame.Location(0, 2), 2, SnakeGame.Direction.NORTH);
+                snake.update(6);
+                assert !snake.isAlive();
+                assert snake.headLocation().equals(
+                        new SnakeGame.Location(0, 2));
+            }),
+            new Test("The alive snake dies when it hits the south wall", () ->
+            {
+                var snake = SnakeGame.Snake.alive(
+                        new SnakeGame.Location(0, -2), 2, SnakeGame.Direction.SOUTH);
+                snake.update(6);
+                assert !snake.isAlive();
+                assert snake.headLocation().equals(
+                        new SnakeGame.Location(0, -2));
+            }),
+            new Test("The alive snake dies when it hits the west wall", () ->
+            {
+                var snake = SnakeGame.Snake.alive(
+                        new SnakeGame.Location(-2, 0), 2, SnakeGame.Direction.WEST);
+                snake.update(6);
+                assert !snake.isAlive();
+                assert snake.headLocation().equals(
+                        new SnakeGame.Location(-2, 0));
+            }),
+            new Test("The alive snake dies when it hits the east wall", () ->
+            {
+                var snake = SnakeGame.Snake.alive(
+                        new SnakeGame.Location(2, 0), 2, SnakeGame.Direction.EAST);
+                snake.update(6);
+                assert !snake.isAlive();
+                assert snake.headLocation().equals(
+                        new SnakeGame.Location(2, 0));
             }),
             new Test("A dead snake can't move", () ->
             {

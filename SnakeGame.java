@@ -47,8 +47,9 @@ public final class SnakeGame
         {
             this.frameSize = frameSize;
             this.snake = Snake.alive(
-                    ((frameSize / tileSize) / 2) * tileSize,
-                    ((frameSize / tileSize) / 2) * tileSize,
+                    new Location(
+                            ((frameSize / tileSize) / 2) * tileSize,
+                            ((frameSize / tileSize) / 2) * tileSize),
                     tileSize,
                     Direction.EAST);
         }
@@ -88,36 +89,34 @@ public final class SnakeGame
         }
     }
 
+    record Location(int x, int y) {}
+
     static final class Snake implements KeyListener
     {
-        public int xHead;
-        public int yHead;
+        private Location headLocation;
         public int size;
         public Direction currentDirection;
         public Direction nextDirection;
         private boolean isAlive;
 
         Snake(
-                int xHead,
-                int yHead,
+                Location headLocation,
                 int size,
                 Direction currentDirection,
                 boolean isAlive)
         {
-            this.xHead = xHead;
-            this.yHead = yHead;
+            this.headLocation = headLocation;
             this.size = size;
             this.currentDirection = currentDirection;
             this.isAlive = isAlive;
         }
 
         public static Snake alive(
-                int xHead,
-                int yHead,
+                Location headLocation,
                 int size,
                 Direction direction)
         {
-            return new Snake(xHead, yHead, size, direction, true);
+            return new Snake(headLocation, size, direction, true);
         }
 
         public void update(int frameSize)
@@ -134,25 +133,34 @@ public final class SnakeGame
                     case NORTH ->
                     {
                         if (isNearNorthWall()) die();
-                        else yHead--;
+                        else this.headLocation = new Location(
+                                headLocation.x(), headLocation().y() - 1);
                     }
                     case SOUTH ->
                     {
                         if (isNearSouthWall(frameSize)) die();
-                        else yHead++;
+                        else this.headLocation = new Location(
+                                headLocation.x(), headLocation().y() + 1);
                     }
                     case WEST ->
                     {
                         if (isNearWestWall()) die();
-                        else xHead--;
+                        else this.headLocation = new Location(
+                                headLocation.x() - 1, headLocation().y());
                     }
                     case EAST ->
                     {
                         if (isNearEastWall(frameSize)) die();
-                        else xHead++;
+                        else this.headLocation = new Location(
+                                headLocation.x() + 1, headLocation().y());
                     }
                 }
             }
+        }
+
+        public Location headLocation()
+        {
+            return headLocation;
         }
 
         private void setNextDirection(Direction direction)
@@ -170,27 +178,27 @@ public final class SnakeGame
 
         private boolean hasCompletedTheCurrentCrawl()
         {
-            return xHead % size == 0 && yHead % size == 0;
+            return headLocation.x() % size == 0 && headLocation.y() % size == 0;
         }
 
         private boolean isNearNorthWall()
         {
-            return yHead == 0;
+            return headLocation.y() == 0;
         }
 
         private boolean isNearSouthWall(int frameSize)
         {
-            return yHead + size == frameSize;
+            return headLocation.y() + size == frameSize;
         }
 
         private boolean isNearWestWall()
         {
-            return xHead == 0;
+            return headLocation.x() == 0;
         }
 
         private boolean isNearEastWall(int frameSize)
         {
-            return xHead + size == frameSize;
+            return headLocation.x() + size == frameSize;
         }
 
         private void die()
@@ -211,7 +219,7 @@ public final class SnakeGame
         private void renderHead(Graphics g)
         {
             g.setColor(isAlive() ? new Color(84, 66, 142) : Color.GRAY);
-            g.fillRect(xHead, yHead, size, size);
+            g.fillRect(headLocation.x(), headLocation().y(), size, size);
         }
 
         @Override

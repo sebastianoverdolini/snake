@@ -1,8 +1,11 @@
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Optional;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static java.awt.event.KeyEvent.*;
 
@@ -47,7 +50,13 @@ public final class SnakeGame
         {
             this.frameSize = frameSize;
             this.snake = Snake.alive(
-                    new Location(0, 0),
+                    Stream.iterate(
+                            new Location(0, 0),
+                            location -> Math.abs(location.x() - tileSize) <= 3 * tileSize,
+                            location -> new Location(
+                                    location.x() - 1,
+                                    location.y())
+                    ).toList(),
                     tileSize,
                     Direction.EAST);
         }
@@ -91,30 +100,30 @@ public final class SnakeGame
 
     static final class Snake implements KeyListener
     {
-        private Location headLocation;
+        private List<Location> location;
         public int size;
         public Direction currentDirection;
         public Direction nextDirection;
         private boolean isAlive;
 
-        Snake(
-                Location headLocation,
+        public Snake(
+                List<Location> location,
                 int size,
                 Direction currentDirection,
                 boolean isAlive)
         {
-            this.headLocation = headLocation;
+            this.location = new ArrayList<>(location);
             this.size = size;
             this.currentDirection = currentDirection;
             this.isAlive = isAlive;
         }
 
         public static Snake alive(
-                Location headLocation,
+                List<Location> location,
                 int size,
                 Direction direction)
         {
-            return new Snake(headLocation, size, direction, true);
+            return new Snake(location, size, direction, true);
         }
 
         public void update(int frameSize)
@@ -131,34 +140,47 @@ public final class SnakeGame
                     case NORTH ->
                     {
                         if (isNearNorthWall(frameSize)) die();
-                        else this.headLocation = new Location(
-                                headLocation.x(), headLocation().y() + 1);
+                        else location = new ArrayList<>(
+                                    Stream.concat(
+                                            Stream.of(new Location(headLocation().x(), headLocation().y() + 1)),
+                                            location.subList(0, location.size() - 1).stream()).toList());
                     }
                     case SOUTH ->
                     {
                         if (isNearSouthWall(frameSize)) die();
-                        else this.headLocation = new Location(
-                                headLocation.x(), headLocation().y() - 1);
+                        else location = new ArrayList<>(
+                                Stream.concat(
+                                        Stream.of(new Location(headLocation().x(), headLocation().y() - 1)),
+                                        location.subList(0, location.size() - 1).stream()).toList());
                     }
                     case WEST ->
                     {
                         if (isNearWestWall(frameSize)) die();
-                        else this.headLocation = new Location(
-                                headLocation.x() - 1, headLocation().y());
+                        else location = new ArrayList<>(
+                                Stream.concat(
+                                        Stream.of(new Location(headLocation().x() - 1, headLocation().y())),
+                                        location.subList(0, location.size() - 1).stream()).toList());
                     }
                     case EAST ->
                     {
                         if (isNearEastWall(frameSize)) die();
-                        else this.headLocation = new Location(
-                                headLocation.x() + 1, headLocation().y());
+                        else location = new ArrayList<>(
+                                Stream.concat(
+                                        Stream.of(new Location(headLocation().x() + 1, headLocation().y())),
+                                        location.subList(0, location.size() - 1).stream()).toList());
                     }
                 }
             }
         }
 
-        public Location headLocation()
+        private Location headLocation()
         {
-            return headLocation;
+            return location.get(0);
+        }
+
+        public List<Location> location()
+        {
+            return location;
         }
 
         private void setNextDirection(Direction direction)
@@ -176,27 +198,27 @@ public final class SnakeGame
 
         private boolean hasCompletedTheCurrentCrawl()
         {
-            return headLocation.x() % size == 0 && headLocation.y() % size == 0;
+            return headLocation().x() % size == 0 && headLocation().y() % size == 0;
         }
 
         private boolean isNearNorthWall(int frameSize)
         {
-            return headLocation.y() + (size / 2) == (frameSize / 2);
+            return headLocation().y() + (size / 2) == (frameSize / 2);
         }
 
         private boolean isNearSouthWall(int frameSize)
         {
-            return headLocation.y() - (size / 2) == - (frameSize / 2);
+            return headLocation().y() - (size / 2) == - (frameSize / 2);
         }
 
         private boolean isNearWestWall(int frameSize)
         {
-            return headLocation.x() - (size / 2) == - (frameSize / 2);
+            return headLocation().x() - (size / 2) == - (frameSize / 2);
         }
 
         private boolean isNearEastWall(int frameSize)
         {
-            return headLocation.x() + (size / 2) == (frameSize / 2);
+            return headLocation().x() + (size / 2) == (frameSize / 2);
         }
 
         private void die()
@@ -212,11 +234,11 @@ public final class SnakeGame
         public void render(int frameSize, Graphics g)
         {
             g.setColor(isAlive() ? new Color(84, 66, 142) : Color.GRAY);
-            g.fillRect(
-                    (frameSize / 2) + headLocation.x() - (size / 2),
-                    (frameSize / 2) - headLocation().y() - (size / 2),
+            location.forEach(l -> g.fillRect(
+                    (frameSize / 2) + l.x() - (size / 2),
+                    (frameSize / 2) - l.y() - (size / 2),
                     size,
-                    size);
+                    size));
         }
 
         @Override

@@ -3,7 +3,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.awt.event.KeyEvent.*;
@@ -154,11 +153,13 @@ final class Snake implements KeyListener
     @Override
     public void keyPressed(KeyEvent e)
     {
-        Direction.keyEvent(e).ifPresentOrElse(
-                this::setNextDirection,
-                () ->
-                {
-                });
+        switch (e.getKeyCode())
+        {
+            case VK_UP -> setNextDirection(Direction.NORTH);
+            case VK_DOWN -> setNextDirection(Direction.SOUTH);
+            case VK_LEFT -> setNextDirection(Direction.WEST);
+            case VK_RIGHT -> setNextDirection(Direction.EAST);
+        }
     }
 
     @Override
@@ -177,18 +178,6 @@ final class Snake implements KeyListener
         SOUTH,
         WEST,
         EAST;
-
-        private static Optional<Direction> keyEvent(KeyEvent e)
-        {
-            return Optional.ofNullable(switch (e.getKeyCode())
-            {
-                case VK_UP -> NORTH;
-                case VK_DOWN -> SOUTH;
-                case VK_LEFT -> WEST;
-                case VK_RIGHT -> EAST;
-                default -> null;
-            });
-        }
 
         private Direction opposite()
         {

@@ -44,41 +44,18 @@ final class Snake implements KeyListener
                 currentDirection = nextDirection;
                 nextDirection = null;
             }
-            switch (currentDirection)
-            {
-                case NORTH ->
-                {
-                    if (isNearNorthWall(frameSize)) die();
-                    else location = new ArrayList<>(
-                            Stream.concat(
-                                    Stream.of(new Location(headLocation().x(), headLocation().y() + 1)),
-                                    location.subList(0, location.size() - 1).stream()).toList());
-                }
-                case SOUTH ->
-                {
-                    if (isNearSouthWall(frameSize)) die();
-                    else location = new ArrayList<>(
-                            Stream.concat(
-                                    Stream.of(new Location(headLocation().x(), headLocation().y() - 1)),
-                                    location.subList(0, location.size() - 1).stream()).toList());
-                }
-                case WEST ->
-                {
-                    if (isNearWestWall(frameSize)) die();
-                    else location = new ArrayList<>(
-                            Stream.concat(
-                                    Stream.of(new Location(headLocation().x() - 1, headLocation().y())),
-                                    location.subList(0, location.size() - 1).stream()).toList());
-                }
-                case EAST ->
-                {
-                    if (isNearEastWall(frameSize)) die();
-                    else location = new ArrayList<>(
-                            Stream.concat(
-                                    Stream.of(new Location(headLocation().x() + 1, headLocation().y())),
-                                    location.subList(0, location.size() - 1).stream()).toList());
-                }
-            }
+            if (isHittingWall(frameSize))
+                die();
+            else location = Stream.concat(Stream.of(
+                    switch (currentDirection)
+                    {
+                        case NORTH -> new Location(headLocation().x(), headLocation().y() + 1);
+                        case SOUTH -> new Location(headLocation().x(), headLocation().y() - 1);
+                        case WEST -> new Location(headLocation().x() - 1, headLocation().y());
+                        case EAST -> new Location(headLocation().x() + 1, headLocation().y());
+                    }),
+                    location.subList(0, location.size() - 1).stream())
+                    .toList();
         }
     }
 
@@ -110,22 +87,70 @@ final class Snake implements KeyListener
         return headLocation().x() % size == 0 && headLocation().y() % size == 0;
     }
 
-    private boolean isNearNorthWall(int frameSize)
+    private boolean isGoingToNorth()
+    {
+        return currentDirection == Direction.NORTH;
+    }
+
+    private boolean isGoingToSouth()
+    {
+        return currentDirection == Direction.SOUTH;
+    }
+
+    private boolean isGoingToWest()
+    {
+        return currentDirection == Direction.WEST;
+    }
+
+    private boolean isGoingToEast()
+    {
+        return currentDirection == Direction.EAST;
+    }
+
+    private boolean isHittingWall(int frameSize)
+    {
+        return isHittingNorthWall(frameSize) ||
+                isHittingSouthWall(frameSize) ||
+                isHittingWestWall(frameSize) ||
+                isHittingEastWall(frameSize);
+    }
+
+    private boolean isHittingNorthWall(int frameSize)
+    {
+        return isGoingToNorth() && isHeadTouchingNorthWall(frameSize);
+    }
+
+    private boolean isHeadTouchingNorthWall(int frameSize)
     {
         return headLocation().y() + (size / 2) == (frameSize / 2);
     }
 
-    private boolean isNearSouthWall(int frameSize)
+    private boolean isHittingSouthWall(int frameSize)
+    {
+        return isGoingToSouth() && isHeadTouchingSouthWall(frameSize);
+    }
+
+    private boolean isHeadTouchingSouthWall(int frameSize)
     {
         return headLocation().y() - (size / 2) == -(frameSize / 2);
     }
 
-    private boolean isNearWestWall(int frameSize)
+    private boolean isHittingWestWall(int frameSize)
+    {
+        return isGoingToWest() && isHeadTouchingWestWall(frameSize);
+    }
+
+    private boolean isHeadTouchingWestWall(int frameSize)
     {
         return headLocation().x() - (size / 2) == -(frameSize / 2);
     }
 
-    private boolean isNearEastWall(int frameSize)
+    private boolean isHittingEastWall(int frameSize)
+    {
+        return isGoingToEast() && isHeadTouchingEastWall(frameSize);
+    }
+
+    private boolean isHeadTouchingEastWall(int frameSize)
     {
         return headLocation().x() + (size / 2) == (frameSize / 2);
     }

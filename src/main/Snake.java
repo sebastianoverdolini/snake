@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -21,7 +20,7 @@ final class Snake implements KeyListener
             Direction currentDirection,
             boolean isAlive)
     {
-        this.location = new ArrayList<>(location);
+        this.location = location;
         this.size = size;
         this.currentDirection = currentDirection;
         this.isAlive = isAlive;

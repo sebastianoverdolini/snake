@@ -21,7 +21,7 @@ public final class Tests
                 var game = new Game(6, 2);
                 var g = new FakeGraphics();
                 game.render(g);
-                assert g.logs.subList(0, 12).equals(List.of(
+                Test.assertEquals(g.logs.subList(0, 12), List.of(
                         "setColor " + Game.darkGrassColor,
                         String.format("fillRect %d %d %d %d", 0, 0, 2, 2),
                         "setColor " + Game.lightGrassColor,

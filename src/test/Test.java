@@ -20,4 +20,9 @@ public final class Test
     {
         test.run();
     }
+
+    public static <T> void assertEquals(T actual, T expected)
+    {
+        assert actual.equals(expected) : actual;
+    }
 }

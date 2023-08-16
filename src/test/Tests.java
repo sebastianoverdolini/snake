@@ -63,96 +63,76 @@ public final class Tests
                 assert g.logs.get(0).equals("setColor " + Color.GRAY);
             }),
             new Test("""
-                    The alive snake keeps crawling towards its
-                    current direction if it doesn't want to turn (NORTH)
+                    An alive snake, lined and directed to north, increases
+                    its y coordinates by one at each update
                     """, () ->
             {
                 var snake = Snake.alive(
-                        List.of(
-                                new Location(0, 0),
-                                new Location(0, -1),
-                                new Location(0, -2)),
+                        List.of(new Location(0, 0), new Location(0, -1)),
                         2,
                         Snake.Direction.NORTH);
-                snake.update(6);
-                assert snake.location().equals(List.of(
-                        new Location(0, 1),
-                        new Location(0, 0),
-                        new Location(0, -1)));
-                snake.update(6);
-                assert snake.location().equals(List.of(
-                        new Location(0, 2),
-                        new Location(0, 1),
-                        new Location(0, 0)));
+                snake.update(100);
+                Assertions.assertEquals(
+                        snake.location(),
+                        List.of(new Location(0, 1), new Location(0, 0)));
+                snake.update(100);
+                Assertions.assertEquals(
+                        snake.location(),
+                        List.of(new Location(0, 2), new Location(0, 1)));
             }),
             new Test("""
-                    The alive snake keeps crawling towards its
-                    current direction if it doesn't want to turn (SOUTH)
+                    An alive snake, lined and directed to south, decreases
+                    its y coordinates by one at each update
                     """, () ->
             {
                 var snake = Snake.alive(
-                        List.of(
-                                new Location(0, 0),
-                                new Location(0, 1),
-                                new Location(0, 2)),
+                        List.of(new Location(0, 0), new Location(0, 1)),
                         2,
                         Snake.Direction.SOUTH);
-                snake.update(6);
-                assert snake.location().equals(List.of(
-                        new Location(0, -1),
-                        new Location(0, 0),
-                        new Location(0, 1)));
-                snake.update(6);
-                assert snake.location().equals(List.of(
-                        new Location(0, -2),
-                        new Location(0, -1),
-                        new Location(0, 0)));
+                snake.update(100);
+                Assertions.assertEquals(
+                        snake.location(),
+                        List.of(new Location(0, -1), new Location(0, 0)));
+                snake.update(100);
+                Assertions.assertEquals(
+                        snake.location(),
+                        List.of(new Location(0, -2), new Location(0, -1)));
             }),
             new Test("""
-                    The alive snake keeps crawling towards its
-                    current direction if it doesn't want to turn (WEST)
+                    An alive snake, lined and directed to west, decreases
+                    its x coordinates by one at each update
                     """, () ->
             {
                 var snake = Snake.alive(
-                        List.of(
-                                new Location(0, 0),
-                                new Location(1, 0),
-                                new Location(2, 0)),
+                        List.of(new Location(0, 0), new Location(1, 0)),
                         2,
                         Snake.Direction.WEST);
-                snake.update(6);
-                assert snake.location().equals(List.of(
-                        new Location(-1, 0),
-                        new Location(0, 0),
-                        new Location(1, 0)));
-                snake.update(6);
-                assert snake.location().equals(List.of(
-                        new Location(-2, 0),
-                        new Location(-1, 0),
-                        new Location(0, 0)));
+                snake.update(100);
+                Assertions.assertEquals(
+                        snake.location(),
+                        List.of(new Location(-1, 0), new Location(0, 0)));
+                snake.update(100);
+                Assertions.assertEquals(
+                        snake.location(),
+                        List.of(new Location(-2, 0), new Location(-1, 0)));
             }),
             new Test("""
-                    The alive snake keeps crawling towards its
-                    current direction if it doesn't want to turn (EAST)
+                    An alive snake, lined and directed to east, increases
+                    its x coordinates by one at each update
                     """, () ->
             {
                 var snake = Snake.alive(
-                        List.of(
-                                new Location(0, 0),
-                                new Location(-1, 0),
-                                new Location(-2, 0)),
+                        List.of(new Location(0, 0), new Location(-1, 0)),
                         2,
                         Snake.Direction.EAST);
-                snake.update(6);
-                assert snake.location().equals(List.of(
-                        new Location(1, 0),
-                        new Location(0, 0),
-                        new Location(-1, 0)));
-                snake.update(6);
-                assert snake.location().equals(List.of(
-                        new Location(2, 0),
-                        new Location(1, 0),
-                        new Location(0, 0)));
+                snake.update(100);
+                Assertions.assertEquals(
+                        snake.location(),
+                        List.of(new Location(1, 0), new Location(0, 0)));
+                snake.update(100);
+                Assertions.assertEquals(
+                        snake.location(),
+                        List.of(new Location(2, 0), new Location(1, 0)));
             }),
             new Test("The alive snake doesn't turn when it is in the middle of a tile (1)", () ->
             {

@@ -16,19 +16,19 @@ public final class Tests
                         new Location(-4, 0)));
                 assert game.snake.currentDirection == Snake.Direction.EAST;
             }),
-            new Test("The game screen's background is a dark and light green grid", () ->
+            new Test("The background is a dark and light green grid", () ->
             {
-                var game = new Game(4, 2);
+                var background = new Background(4, 2);
                 var g = new FakeGraphics();
-                game.render(g);
+                background.render(g);
                 Test.assertEquals(g.logs.subList(0, 8), List.of(
-                        "setColor " + Game.darkGrassColor,
+                        "setColor " + Background.darkGrassColor,
                         "fillRect 0 0 2 2",
-                        "setColor " + Game.lightGrassColor,
+                        "setColor " + Background.lightGrassColor,
                         "fillRect 2 0 2 2",
-                        "setColor " + Game.darkGrassColor,
+                        "setColor " + Background.darkGrassColor,
                         "fillRect 0 2 2 2",
-                        "setColor " + Game.lightGrassColor,
+                        "setColor " + Background.lightGrassColor,
                         "fillRect 2 2 2 2"));
             }),
             new Test("The alive snake is rendered as a purple rectangle", () ->

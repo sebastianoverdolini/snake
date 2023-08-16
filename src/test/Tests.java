@@ -6,8 +6,8 @@ public final class Tests
 {
     public final static List<Test> tests = List.of(
             new Test("""
-                    A new game has the snake placed in the center and
-                    directed towards EAST
+                    A new game has a three tiles long snake placed at the center
+                    of the field, directed towards EAST
                     """, () ->
             {
                 var game = new Game(6, 2);

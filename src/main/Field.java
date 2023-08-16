@@ -1,13 +1,13 @@
 import java.awt.*;
 
-public class Background
+public class Field
 {
     public static Color darkGrassColor = new Color(128, 185, 24);
     public static Color lightGrassColor = new Color(170, 204, 0);
     private final int frameSize;
     private final int tileSize;
 
-    public Background(int frameSize, int tileSize)
+    public Field(int frameSize, int tileSize)
     {
         this.frameSize = frameSize;
         this.tileSize = tileSize;

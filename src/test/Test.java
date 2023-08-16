@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class Test
 {
@@ -7,7 +8,7 @@ public final class Test
 
     public Test(String description, Runnable test)
     {
-        this.description = description;
+        this.description = description.lines().collect(Collectors.joining(" "));
         this.test = test;
     }
 

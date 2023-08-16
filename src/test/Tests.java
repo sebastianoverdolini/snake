@@ -5,7 +5,10 @@ import java.util.List;
 public final class Tests
 {
     public final static List<Test> tests = List.of(
-            new Test("A new game has the snake placed in the center and directed towards EAST", () ->
+            new Test("""
+                    A new game has the snake placed in the center and
+                    directed towards EAST
+                    """, () ->
             {
                 var game = new Game(6, 2);
                 assert game.snake.location().equals(List.of(
@@ -59,7 +62,10 @@ public final class Tests
                 snake.render(100, g);
                 assert g.logs.get(0).equals("setColor " + Color.GRAY);
             }),
-            new Test("The alive snake keeps crawling towards its current direction if it doesn't want to turn", List.of(
+            new Test("""
+                    The alive snake keeps crawling towards its
+                    current direction if it doesn't want to turn
+                    """, List.of(
                     () ->
                     {
                         var snake = Snake.alive(
@@ -140,7 +146,9 @@ public final class Tests
                                 new Location(1, 0),
                                 new Location(0, 0)));
                     })),
-            new Test("The alive snake doesn't turn when it is in the middle of a tile", List.of(
+            new Test("""
+                    The alive snake doesn't turn when it is in the middle of a tile
+                    """, List.of(
                     () ->
                     {
                         var snake = Snake.alive(
@@ -329,7 +337,10 @@ public final class Tests
                                 new Location(0, 0)));
                     }
             )),
-            new Test("The alive snake doesn't change direction when the player presses an unknown button", () ->
+            new Test("""
+                    The alive snake doesn't change direction when
+                    the player presses an unknown button
+                    """, () ->
             {
                 var snake = Snake.alive(
                         List.of(new Location(0, 0)), 10, Snake.Direction.EAST);

@@ -64,279 +64,282 @@ public final class Tests
             }),
             new Test("""
                     The alive snake keeps crawling towards its
-                    current direction if it doesn't want to turn
-                    """, List.of(
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(0, -1),
-                                        new Location(0, -2)),
-                                2,
-                                Snake.Direction.NORTH);
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(0, 1),
+                    current direction if it doesn't want to turn (NORTH)
+                    """, () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
                                 new Location(0, 0),
-                                new Location(0, -1)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(0, 2),
-                                new Location(0, 1),
-                                new Location(0, 0)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(0, 1),
-                                        new Location(0, 2)),
-                                2,
-                                Snake.Direction.SOUTH);
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
                                 new Location(0, -1),
-                                new Location(0, 0),
-                                new Location(0, 1)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(0, -2),
-                                new Location(0, -1),
-                                new Location(0, 0)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(1, 0),
-                                        new Location(2, 0)),
-                                2,
-                                Snake.Direction.WEST);
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(-1, 0),
-                                new Location(0, 0),
-                                new Location(1, 0)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(-2, 0),
-                                new Location(-1, 0),
-                                new Location(0, 0)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(-1, 0),
-                                        new Location(-2, 0)),
-                                2,
-                                Snake.Direction.EAST);
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(1, 0),
-                                new Location(0, 0),
-                                new Location(-1, 0)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(2, 0),
-                                new Location(1, 0),
-                                new Location(0, 0)));
-                    })),
+                                new Location(0, -2)),
+                        2,
+                        Snake.Direction.NORTH);
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(0, 1),
+                        new Location(0, 0),
+                        new Location(0, -1)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(0, 2),
+                        new Location(0, 1),
+                        new Location(0, 0)));
+            }),
             new Test("""
-                    The alive snake doesn't turn when it is in the middle of a tile
-                    """, List.of(
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(new Location(1, 0)), 2, Snake.Direction.EAST);
-                        snake.nextDirection = Snake.Direction.NORTH;
-                        snake.update(6);
-                        assert !snake.location().equals(List.of(
-                                new Location(1, 1)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(new Location(0, 1)), 2, Snake.Direction.NORTH);
-                        snake.nextDirection = Snake.Direction.EAST;
-                        snake.update(6);
-                        assert !snake.location().equals(List.of(
-                                new Location(1, 1)));
-                    })),
-            new Test("The alive snake turns", List.of(
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(0, -1),
-                                        new Location(0, -2)),
-                                2,
-                                Snake.Direction.NORTH);
-                        snake.keyPressed(pressRightArrowKey());
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(1, 0),
+                    The alive snake keeps crawling towards its
+                    current direction if it doesn't want to turn (SOUTH)
+                    """, () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
                                 new Location(0, 0),
-                                new Location(0, -1)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(2, 0),
-                                new Location(1, 0),
-                                new Location(0, 0)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(0, -1),
-                                        new Location(0, -2)),
-                                2,
-                                Snake.Direction.NORTH);
-                        snake.keyPressed(pressLeftArrowKey());
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(-1, 0),
-                                new Location(0, 0),
-                                new Location(0, -1)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(-2, 0),
-                                new Location(-1, 0),
-                                new Location(0, 0)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(0, -1),
-                                        new Location(0, -2)),
-                                2,
-                                Snake.Direction.NORTH);
-                        snake.keyPressed(pressRightArrowKey());
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(1, 0),
-                                new Location(0, 0),
-                                new Location(0, -1)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(2, 0),
-                                new Location(1, 0),
-                                new Location(0, 0)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(0, 1),
-                                        new Location(0, 2)),
-                                2,
-                                Snake.Direction.SOUTH);
-                        snake.keyPressed(pressRightArrowKey());
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(1, 0),
-                                new Location(0, 0),
-                                new Location(0, 1)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(2, 0),
-                                new Location(1, 0),
-                                new Location(0, 0)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(0, 1),
-                                        new Location(0, 2)),
-                                2,
-                                Snake.Direction.SOUTH);
-                        snake.keyPressed(pressLeftArrowKey());
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(-1, 0),
-                                new Location(0, 0),
-                                new Location(0, 1)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(-2, 0),
-                                new Location(-1, 0),
-                                new Location(0, 0)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(-1, 0),
-                                        new Location(-2, 0)),
-                                2,
-                                Snake.Direction.EAST);
-                        snake.keyPressed(pressDownArrowKey());
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(0, -1),
-                                new Location(0, 0),
-                                new Location(-1, 0)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(0, -2),
-                                new Location(0, -1),
-                                new Location(0, 0)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(1, 0),
-                                        new Location(2, 0)),
-                                2,
-                                Snake.Direction.WEST);
-                        snake.keyPressed(pressUpArrowKey());
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
                                 new Location(0, 1),
+                                new Location(0, 2)),
+                        2,
+                        Snake.Direction.SOUTH);
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(0, -1),
+                        new Location(0, 0),
+                        new Location(0, 1)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(0, -2),
+                        new Location(0, -1),
+                        new Location(0, 0)));
+            }),
+            new Test("""
+                    The alive snake keeps crawling towards its
+                    current direction if it doesn't want to turn (WEST)
+                    """, () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
                                 new Location(0, 0),
-                                new Location(1, 0)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(0, 2),
+                                new Location(1, 0),
+                                new Location(2, 0)),
+                        2,
+                        Snake.Direction.WEST);
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(-1, 0),
+                        new Location(0, 0),
+                        new Location(1, 0)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(-2, 0),
+                        new Location(-1, 0),
+                        new Location(0, 0)));
+            }),
+            new Test("""
+                    The alive snake keeps crawling towards its
+                    current direction if it doesn't want to turn (EAST)
+                    """, () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
+                                new Location(0, 0),
+                                new Location(-1, 0),
+                                new Location(-2, 0)),
+                        2,
+                        Snake.Direction.EAST);
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(1, 0),
+                        new Location(0, 0),
+                        new Location(-1, 0)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(2, 0),
+                        new Location(1, 0),
+                        new Location(0, 0)));
+            }),
+            new Test("The alive snake doesn't turn when it is in the middle of a tile (1)", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(new Location(1, 0)), 2, Snake.Direction.EAST);
+                snake.nextDirection = Snake.Direction.NORTH;
+                snake.update(6);
+                assert !snake.location().equals(List.of(
+                        new Location(1, 1)));
+            }),
+            new Test("The alive snake doesn't turn when it is in the middle of a tile (2)", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(new Location(0, 1)), 2, Snake.Direction.NORTH);
+                snake.nextDirection = Snake.Direction.EAST;
+                snake.update(6);
+                assert !snake.location().equals(List.of(
+                        new Location(1, 1)));
+            }),
+            new Test("The alive snake turns 1", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
+                                new Location(0, 0),
+                                new Location(0, -1),
+                                new Location(0, -2)),
+                        2,
+                        Snake.Direction.NORTH);
+                snake.keyPressed(pressRightArrowKey());
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(1, 0),
+                        new Location(0, 0),
+                        new Location(0, -1)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(2, 0),
+                        new Location(1, 0),
+                        new Location(0, 0)));
+            }),
+            new Test("The alive snake turns 2", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
+                                new Location(0, 0),
+                                new Location(0, -1),
+                                new Location(0, -2)),
+                        2,
+                        Snake.Direction.NORTH);
+                snake.keyPressed(pressLeftArrowKey());
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(-1, 0),
+                        new Location(0, 0),
+                        new Location(0, -1)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(-2, 0),
+                        new Location(-1, 0),
+                        new Location(0, 0)));
+            }),
+            new Test("The alive snake turns 3", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
+                                new Location(0, 0),
+                                new Location(0, -1),
+                                new Location(0, -2)),
+                        2,
+                        Snake.Direction.NORTH);
+                snake.keyPressed(pressRightArrowKey());
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(1, 0),
+                        new Location(0, 0),
+                        new Location(0, -1)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(2, 0),
+                        new Location(1, 0),
+                        new Location(0, 0)));
+            }),
+            new Test("The alive snake turns 4", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
+                                new Location(0, 0),
                                 new Location(0, 1),
-                                new Location(0, 0)));
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(
-                                        new Location(0, 0),
-                                        new Location(1, 0),
-                                        new Location(2, 0)),
-                                2,
-                                Snake.Direction.WEST);
-                        snake.keyPressed(pressDownArrowKey());
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(0, -1),
+                                new Location(0, 2)),
+                        2,
+                        Snake.Direction.SOUTH);
+                snake.keyPressed(pressRightArrowKey());
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(1, 0),
+                        new Location(0, 0),
+                        new Location(0, 1)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(2, 0),
+                        new Location(1, 0),
+                        new Location(0, 0)));
+            }),
+            new Test("The alive snake turns 5", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
                                 new Location(0, 0),
-                                new Location(1, 0)));
-                        snake.update(6);
-                        assert snake.location().equals(List.of(
-                                new Location(0, -2),
-                                new Location(0, -1),
-                                new Location(0, 0)));
-                    }
-            )),
+                                new Location(0, 1),
+                                new Location(0, 2)),
+                        2,
+                        Snake.Direction.SOUTH);
+                snake.keyPressed(pressLeftArrowKey());
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(-1, 0),
+                        new Location(0, 0),
+                        new Location(0, 1)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(-2, 0),
+                        new Location(-1, 0),
+                        new Location(0, 0)));
+            }),
+            new Test("The alive snake turns 6", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
+                                new Location(0, 0),
+                                new Location(-1, 0),
+                                new Location(-2, 0)),
+                        2,
+                        Snake.Direction.EAST);
+                snake.keyPressed(pressDownArrowKey());
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(0, -1),
+                        new Location(0, 0),
+                        new Location(-1, 0)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(0, -2),
+                        new Location(0, -1),
+                        new Location(0, 0)));
+            }),
+            new Test("The alive snake turns 7", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
+                                new Location(0, 0),
+                                new Location(1, 0),
+                                new Location(2, 0)),
+                        2,
+                        Snake.Direction.WEST);
+                snake.keyPressed(pressUpArrowKey());
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(0, 1),
+                        new Location(0, 0),
+                        new Location(1, 0)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(0, 2),
+                        new Location(0, 1),
+                        new Location(0, 0)));
+            }),
+            new Test("The alive snake turns 8", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(
+                                new Location(0, 0),
+                                new Location(1, 0),
+                                new Location(2, 0)),
+                        2,
+                        Snake.Direction.WEST);
+                snake.keyPressed(pressDownArrowKey());
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(0, -1),
+                        new Location(0, 0),
+                        new Location(1, 0)));
+                snake.update(6);
+                assert snake.location().equals(List.of(
+                        new Location(0, -2),
+                        new Location(0, -1),
+                        new Location(0, 0)));
+            }),
             new Test("""
                     The alive snake doesn't change direction when
                     the player presses an unknown button
@@ -350,40 +353,38 @@ public final class Tests
                         }, 0, 0, 0, KeyEvent.VK_B, '\0'));
                 assert snake.currentDirection == Snake.Direction.EAST;
             }),
-            new Test("The alive snake can't reverse its direction", List.of(
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(new Location(0, 0)), 10, Snake.Direction.NORTH);
-                        snake.keyPressed(pressDownArrowKey());
-                        snake.update(100);
-                        assert snake.currentDirection == Snake.Direction.NORTH;
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(new Location(0, 0)), 10, Snake.Direction.SOUTH);
-                        snake.keyPressed(pressUpArrowKey());
-                        snake.update(100);
-                        assert snake.currentDirection == Snake.Direction.SOUTH;
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(new Location(0, 0)), 10, Snake.Direction.WEST);
-                        snake.keyPressed(pressRightArrowKey());
-                        snake.update(100);
-                        assert snake.currentDirection == Snake.Direction.WEST;
-                    },
-                    () ->
-                    {
-                        var snake = Snake.alive(
-                                List.of(new Location(0, 0)), 10, Snake.Direction.EAST);
-                        snake.keyPressed(pressLeftArrowKey());
-                        snake.update(100);
-                        assert snake.currentDirection == Snake.Direction.EAST;
-                    }
-            )),
+            new Test("The alive snake can't reverse its direction 1", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(new Location(0, 0)), 10, Snake.Direction.NORTH);
+                snake.keyPressed(pressDownArrowKey());
+                snake.update(100);
+                assert snake.currentDirection == Snake.Direction.NORTH;
+            }),
+            new Test("The alive snake can't reverse its direction 2", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(new Location(0, 0)), 10, Snake.Direction.SOUTH);
+                snake.keyPressed(pressUpArrowKey());
+                snake.update(100);
+                assert snake.currentDirection == Snake.Direction.SOUTH;
+            }),
+            new Test("The alive snake can't reverse its direction 3", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(new Location(0, 0)), 10, Snake.Direction.WEST);
+                snake.keyPressed(pressRightArrowKey());
+                snake.update(100);
+                assert snake.currentDirection == Snake.Direction.WEST;
+            }),
+            new Test("The alive snake can't reverse its direction 4", () ->
+            {
+                var snake = Snake.alive(
+                        List.of(new Location(0, 0)), 10, Snake.Direction.EAST);
+                snake.keyPressed(pressLeftArrowKey());
+                snake.update(100);
+                assert snake.currentDirection == Snake.Direction.EAST;
+            }),
             new Test("The alive snake dies when it hits the north wall", () ->
             {
                 var snake = Snake.alive(

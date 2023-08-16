@@ -1,4 +1,3 @@
-import java.util.List;
 import java.util.stream.Collectors;
 
 public final class Test
@@ -10,11 +9,6 @@ public final class Test
     {
         this.description = description.lines().collect(Collectors.joining(" "));
         this.test = test;
-    }
-
-    public Test(String description, List<Runnable> tests)
-    {
-        this(description, () -> tests.forEach(Runnable::run));
     }
 
     public void run()

@@ -25,9 +25,4 @@ public final class Test
             throw error;
         }
     }
-
-    public static <T> void assertEquals(T actual, T expected)
-    {
-        assert actual.equals(expected) : actual;
-    }
 }

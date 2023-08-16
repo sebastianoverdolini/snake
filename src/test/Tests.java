@@ -24,7 +24,7 @@ public final class Tests
                 var field = new Field(4, 2);
                 var g = new FakeGraphics();
                 field.render(g);
-                Test.assertEquals(g.logs.subList(0, 8), List.of(
+                Assertions.assertEquals(g.logs.subList(0, 8), List.of(
                         "setColor " + Field.darkGrassColor,
                         "fillRect 0 0 2 2",
                         "setColor " + Field.lightGrassColor,

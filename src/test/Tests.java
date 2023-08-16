@@ -23,13 +23,13 @@ public final class Tests
                 game.render(g);
                 Test.assertEquals(g.logs.subList(0, 8), List.of(
                         "setColor " + Game.darkGrassColor,
-                        String.format("fillRect %d %d %d %d", 0, 0, 2, 2),
+                        "fillRect 0 0 2 2",
                         "setColor " + Game.lightGrassColor,
-                        String.format("fillRect %d %d %d %d", 2, 0, 2, 2),
+                        "fillRect 2 0 2 2",
                         "setColor " + Game.darkGrassColor,
-                        String.format("fillRect %d %d %d %d", 0, 2, 2, 2),
+                        "fillRect 0 2 2 2",
                         "setColor " + Game.lightGrassColor,
-                        String.format("fillRect %d %d %d %d", 2, 2, 2, 2)));
+                        "fillRect 2 2 2 2"));
             }),
             new Test("The alive snake is rendered as a purple rectangle", () ->
             {

@@ -333,37 +333,18 @@ public final class Tests
                         }, 0, 0, 0, KeyEvent.VK_B, '\0'));
                 assert snake.currentDirection == Snake.Direction.EAST;
             }),
-            new Test("The alive snake can't reverse its direction 1", () ->
+            new Test("""
+                    The alive snake doesn't turn when the player tries to
+                    reverse its direction
+                    """, () ->
             {
-                var snake = Snake.alive(
-                        List.of(new Location(0, 0)), 10, Snake.Direction.NORTH);
-                snake.keyPressed(pressDownArrowKey());
-                snake.update(100);
-                assert snake.currentDirection == Snake.Direction.NORTH;
-            }),
-            new Test("The alive snake can't reverse its direction 2", () ->
-            {
-                var snake = Snake.alive(
-                        List.of(new Location(0, 0)), 10, Snake.Direction.SOUTH);
-                snake.keyPressed(pressUpArrowKey());
-                snake.update(100);
-                assert snake.currentDirection == Snake.Direction.SOUTH;
-            }),
-            new Test("The alive snake can't reverse its direction 3", () ->
-            {
-                var snake = Snake.alive(
-                        List.of(new Location(0, 0)), 10, Snake.Direction.WEST);
-                snake.keyPressed(pressRightArrowKey());
-                snake.update(100);
-                assert snake.currentDirection == Snake.Direction.WEST;
-            }),
-            new Test("The alive snake can't reverse its direction 4", () ->
-            {
-                var snake = Snake.alive(
-                        List.of(new Location(0, 0)), 10, Snake.Direction.EAST);
-                snake.keyPressed(pressLeftArrowKey());
-                snake.update(100);
-                assert snake.currentDirection == Snake.Direction.EAST;
+                for (var direction : Snake.Direction.values())
+                {
+                    var snake = Snake.alive(
+                            List.of(new Location(0, 0)), 1, direction);
+                    snake.keyPressed(key(direction.opposite()));
+                    assert snake.currentDirection == direction;
+                }
             }),
             new Test("The alive snake dies when it hits the north wall", () ->
             {
@@ -438,6 +419,19 @@ public final class Tests
     {
         return new KeyEvent(
                 new Component() {}, 0, 0, 0, KeyEvent.VK_UP, '\0');
+    }
+
+    public static KeyEvent key(Snake.Direction direction)
+    {
+        return new KeyEvent(
+                new Component() {}, 0, 0, 0,
+                switch (direction) {
+                    case NORTH -> KeyEvent.VK_UP;
+                    case SOUTH -> KeyEvent.VK_DOWN;
+                    case WEST -> KeyEvent.VK_LEFT;
+                    case EAST -> KeyEvent.VK_RIGHT;
+                },
+                '\0');
     }
 
     public static Snake deadSnake(int xHead, int yHead)

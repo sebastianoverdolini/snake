@@ -203,7 +203,7 @@ final class Snake implements KeyListener
         WEST,
         EAST;
 
-        private Direction opposite()
+        public Direction opposite()
         {
             return switch (valueOf(name()))
             {

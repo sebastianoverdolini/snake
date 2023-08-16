@@ -1,3 +1,4 @@
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class Test
@@ -11,9 +12,18 @@ public final class Test
         this.test = test;
     }
 
-    public void run()
+    public void run() throws AssertionError
     {
-        test.run();
+        try
+        {
+            test.run();
+        }
+        catch (AssertionError error)
+        {
+            System.out.println("FAILED: " + description);
+            Optional.ofNullable(error.getMessage()).ifPresent(System.out::println);
+            throw error;
+        }
     }
 
     public static <T> void assertEquals(T actual, T expected)

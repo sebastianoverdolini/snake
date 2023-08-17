@@ -382,10 +382,10 @@ public final class Tests
                 assert snake.location().equals(List.of(
                         new Location(2, 0)));
             }),
-            new Test("A dead snake can't move", () ->
+            new Test("A dead snake doesn't move", () ->
             {
                 var snake = deadSnake(1, 1);
-                snake.update(3);
+                snake.update(100);
                 assert snake.location().equals(List.of(
                         new Location(1, 1)));
             }),

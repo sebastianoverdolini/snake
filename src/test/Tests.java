@@ -346,7 +346,7 @@ public final class Tests
                     assert snake.currentDirection == direction;
                 }
             }),
-            new Test("The alive snake dies when it hits the north wall", () ->
+            new Test("The snake dies hitting the north wall", () ->
             {
                 var snake = Snake.alive(
                         List.of(new Location(0, 2)), 2, Snake.Direction.NORTH);
@@ -355,7 +355,7 @@ public final class Tests
                 assert snake.location().equals(List.of(
                         new Location(0, 2)));
             }),
-            new Test("The alive snake dies when it hits the south wall", () ->
+            new Test("The snake dies hitting the south wall", () ->
             {
                 var snake = Snake.alive(
                         List.of(new Location(0, -2)), 2, Snake.Direction.SOUTH);
@@ -364,7 +364,7 @@ public final class Tests
                 assert snake.location().equals(List.of(
                         new Location(0, -2)));
             }),
-            new Test("The alive snake dies when it hits the west wall", () ->
+            new Test("The snake dies hitting the west wall", () ->
             {
                 var snake = Snake.alive(
                         List.of(new Location(-2, 0)), 2, Snake.Direction.WEST);
@@ -373,7 +373,7 @@ public final class Tests
                 assert snake.location().equals(List.of(
                         new Location(-2, 0)));
             }),
-            new Test("The alive snake dies when it hits the east wall", () ->
+            new Test("The snake dies hitting the east wall", () ->
             {
                 var snake = Snake.alive(
                         List.of(new Location(2, 0)), 2, Snake.Direction.EAST);

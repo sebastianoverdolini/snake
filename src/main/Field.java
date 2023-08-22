@@ -4,30 +4,40 @@ public class Field
 {
     public static Color darkGrassColor = new Color(128, 185, 24);
     public static Color lightGrassColor = new Color(170, 204, 0);
-    private final int frameSize;
-    private final int tileSize;
+    public final int size;
 
-    public Field(int frameSize, int tileSize)
+    public Field(int size)
     {
-        this.frameSize = frameSize;
-        this.tileSize = tileSize;
+        this.size = size;
     }
 
-    public void render(Graphics g)
+    public void render(Graphics g, int frameSize)
     {
-        g.setColor(darkGrassColor);
-        for (int i = 0; i < frameSize; i = i + tileSize)
+        String previousColor = null;
+        for (int i = 0; i < size; i++)
         {
-            for (int j = 0; j < frameSize; j = j + tileSize)
+            for (int j = 0; j < size; j++)
             {
-                g.fillRect(j, i, tileSize, tileSize);
-                if (g.getColor().equals(darkGrassColor))
-                {
-                    g.setColor(lightGrassColor);
-                } else
+                if (previousColor == null)
                 {
                     g.setColor(darkGrassColor);
+                    previousColor = "dark";
                 }
+                else if (previousColor.equals("dark"))
+                {
+                    g.setColor(lightGrassColor);
+                    previousColor = "light";
+                }
+                else
+                {
+                    g.setColor(darkGrassColor);
+                    previousColor = "dark";
+                }
+                g.fillRect(
+                        j * (frameSize / size),
+                        i * (frameSize / size),
+                        frameSize / size,
+                        frameSize / size);
             }
         }
     }

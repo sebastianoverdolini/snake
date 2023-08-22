@@ -1,36 +1,30 @@
 import java.awt.*;
-import java.util.stream.Stream;
+import java.util.List;
 
 public final class Game
 {
-    private final int frameSize;
     private final Field field;
     public final Snake snake;
 
-    public Game(int frameSize, int tileSize)
+    public Game(int size)
     {
-        this.frameSize = frameSize;
-        this.field = new Field(frameSize, tileSize);
+        this.field = new Field(size);
         this.snake = Snake.alive(
-                Stream.iterate(
+                List.of(
                         new Location(0, 0),
-                        location -> Math.abs(location.x() - tileSize) <= 3 * tileSize,
-                        location -> new Location(
-                                location.x() - 1,
-                                location.y())
-                ).toList(),
-                tileSize,
+                        new Location(-1, 0),
+                        new Location(-2, 0)),
                 Snake.Direction.EAST);
     }
 
     public void update()
     {
-        snake.update(frameSize);
+        snake.update(field.size);
     }
 
-    public void render(Graphics g)
+    public void render(Graphics g, int frameSize)
     {
-        field.render(g);
-        snake.render(frameSize, g);
+        field.render(g, frameSize);
+        snake.render(frameSize, frameSize / field.size, g);
     }
 }

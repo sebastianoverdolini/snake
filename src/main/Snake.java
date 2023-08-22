@@ -9,41 +9,37 @@ import static java.awt.event.KeyEvent.*;
 final class Snake implements KeyListener
 {
     private List<Location> location;
-    public int size;
     public Direction currentDirection;
     public Direction nextDirection;
     private boolean isAlive;
 
     public Snake(
             List<Location> location,
-            int size,
             Direction currentDirection,
             boolean isAlive)
     {
         this.location = location;
-        this.size = size;
         this.currentDirection = currentDirection;
         this.isAlive = isAlive;
     }
 
     public static Snake alive(
             List<Location> location,
-            int size,
             Direction direction)
     {
-        return new Snake(location, size, direction, true);
+        return new Snake(location, direction, true);
     }
 
-    public void update(int frameSize)
+    public void update(int size)
     {
         if (isAlive())
         {
-            if (wantsTurn() && hasCompletedTheCurrentCrawl())
+            if (wantsTurn())
             {
                 currentDirection = nextDirection;
                 nextDirection = null;
             }
-            if (isHittingWall(frameSize))
+            if (isHittingWall(size))
                 die();
             else location = Stream.concat(Stream.of(
                     switch (currentDirection)
@@ -81,11 +77,6 @@ final class Snake implements KeyListener
         return nextDirection != null;
     }
 
-    private boolean hasCompletedTheCurrentCrawl()
-    {
-        return headLocation().x() % size == 0 && headLocation().y() % size == 0;
-    }
-
     private boolean isGoingToNorth()
     {
         return currentDirection == Direction.NORTH;
@@ -121,7 +112,7 @@ final class Snake implements KeyListener
 
     private boolean isHeadTouchingNorthWall(int frameSize)
     {
-        return headLocation().y() + (size / 2) == (frameSize / 2);
+        return headLocation().y() == (frameSize / 2);
     }
 
     private boolean isHittingSouthWall(int frameSize)
@@ -131,7 +122,7 @@ final class Snake implements KeyListener
 
     private boolean isHeadTouchingSouthWall(int frameSize)
     {
-        return headLocation().y() - (size / 2) == -(frameSize / 2);
+        return headLocation().y() == -(frameSize / 2);
     }
 
     private boolean isHittingWestWall(int frameSize)
@@ -141,7 +132,7 @@ final class Snake implements KeyListener
 
     private boolean isHeadTouchingWestWall(int frameSize)
     {
-        return headLocation().x() - (size / 2) == -(frameSize / 2);
+        return headLocation().x() == -(frameSize / 2);
     }
 
     private boolean isHittingEastWall(int frameSize)
@@ -151,7 +142,7 @@ final class Snake implements KeyListener
 
     private boolean isHeadTouchingEastWall(int frameSize)
     {
-        return headLocation().x() + (size / 2) == (frameSize / 2);
+        return headLocation().x() == (frameSize / 2);
     }
 
     private void die()
@@ -164,14 +155,14 @@ final class Snake implements KeyListener
         return isAlive;
     }
 
-    public void render(int frameSize, Graphics g)
+    public void render(int frameSize, int tileSize, Graphics g)
     {
         g.setColor(isAlive() ? new Color(84, 66, 142) : Color.GRAY);
         location.forEach(l -> g.fillRect(
-                (frameSize / 2) + l.x() - (size / 2),
-                (frameSize / 2) - l.y() - (size / 2),
-                size,
-                size));
+                (frameSize / 2) + (l.x() * tileSize) - (tileSize / 2),
+                (frameSize / 2) - (l.y() * tileSize) - (tileSize / 2),
+                tileSize,
+                tileSize));
     }
 
     @Override

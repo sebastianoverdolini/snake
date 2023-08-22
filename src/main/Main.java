@@ -8,7 +8,7 @@ public final class Main
     {
         final var frameSize = 600;
         final var frame = new JFrame("Snake");
-        var game = new Game(frameSize, 40);
+        var game = new Game(15);
         frame.setSize(frameSize, frameSize);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -21,14 +21,14 @@ public final class Main
             protected void paintComponent(Graphics g)
             {
                 super.paintComponent(g);
-                game.render(g);
+                game.render(g, frameSize);
             }
         };
         panel.setPreferredSize(new Dimension(frameSize, frameSize));
         frame.add(panel);
         frame.pack();
         frame.setVisible(true);
-        new Timer(5, e -> {
+        new Timer(500, e -> {
             game.update();
             frame.repaint();
         }).start();

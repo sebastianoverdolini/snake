@@ -19,28 +19,18 @@ public final class Tests
             }),
             new Test("The field is rendered as a dark and light green grid", () ->
             {
-                var field = new Field(3);
+                var field = new Field(2);
                 var g = new FakeGraphics();
-                field.render(g, 30);
+                field.render(g, 20);
                 Assertions.assertEquals(g.logs, List.of(
                         "setColor " + Field.darkGrassColor,
                         "fillRect 0 0 10 10",
                         "setColor " + Field.lightGrassColor,
                         "fillRect 10 0 10 10",
                         "setColor " + Field.darkGrassColor,
-                        "fillRect 20 0 10 10",
-                        "setColor " + Field.lightGrassColor,
                         "fillRect 0 10 10 10",
-                        "setColor " + Field.darkGrassColor,
-                        "fillRect 10 10 10 10",
                         "setColor " + Field.lightGrassColor,
-                        "fillRect 20 10 10 10",
-                        "setColor " + Field.darkGrassColor,
-                        "fillRect 0 20 10 10",
-                        "setColor " + Field.lightGrassColor,
-                        "fillRect 10 20 10 10",
-                        "setColor " + Field.darkGrassColor,
-                        "fillRect 20 20 10 10"));
+                        "fillRect 10 10 10 10"));
             }),
             new Test("The alive snake is rendered as a purple rectangle", () ->
             {

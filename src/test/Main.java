@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.stream.Stream;
 
 public class Main
@@ -5,7 +6,10 @@ public class Main
     public static void main(String[] args)
     {
         var success = true;
-        for (var test : Stream.concat(Tests.tests.stream(), DirectionTest.tests.stream()).toList())
+        var tests = Stream.of(Tests.tests, Tests.snakeTests, DirectionTest.tests)
+                .flatMap(Collection::stream)
+                .toList();
+        for (var test : tests)
         {
             try
             {

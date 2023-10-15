@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public final class Tests
@@ -55,86 +56,6 @@ public final class Tests
                 var g = new FakeGraphics();
                 snake.render(100, 1, g);
                 assert g.logs.get(0).equals("setColor " + Color.GRAY);
-            }),
-            new Test("The snake's body follows its head when it moves", () ->
-            {
-                record Example(
-                        List<Location> snakeLocation,
-                        Direction snakeDirection,
-                        KeyEvent keyEvent,
-                        List<Location> expectedSnakeLocation) {}
-                Stream.of(
-                        new Example(
-                                List.of(new Location(0, 0), new Location(0, -1)),
-                                Direction.NORTH,
-                                pressUpArrowKey(),
-                                List.of(new Location(0, 1), new Location(0, 0))),
-                        new Example(
-                                List.of(new Location(0, 0), new Location(0, 1)),
-                                Direction.SOUTH,
-                                pressDownArrowKey(),
-                                List.of(new Location(0, -1), new Location(0, 0))),
-                        new Example(
-                                List.of(new Location(0, 0), new Location(1, 0)),
-                                Direction.WEST,
-                                pressLeftArrowKey(),
-                                List.of(new Location(-1, 0), new Location(0, 0))),
-                        new Example(
-                                List.of(new Location(0, 0), new Location(-1, 0)),
-                                Direction.EAST,
-                                pressRightArrowKey(),
-                                List.of(new Location(1, 0), new Location(0, 0))),
-                        new Example(
-                                List.of(new Location(0, 0), new Location(0, -1)),
-                                Direction.NORTH,
-                                pressRightArrowKey(),
-                                List.of(new Location(1, 0), new Location(0, 0))),
-                        new Example(
-                                List.of(new Location(1, 0), new Location(0, 0)),
-                                Direction.EAST,
-                                pressDownArrowKey(),
-                                List.of(new Location(1, -1), new Location(1, 0))),
-                        new Example(
-                                List.of(new Location(1, -1), new Location(1, 0)),
-                                Direction.SOUTH,
-                                pressLeftArrowKey(),
-                                List.of(new Location(0, -1), new Location(1, -1))),
-                        new Example(
-                                List.of(new Location(0, -1), new Location(1, -1)),
-                                Direction.WEST,
-                                pressUpArrowKey(),
-                                List.of(new Location(0, 0), new Location(0, -1))),
-                        new Example(
-                                List.of(new Location(0, 0), new Location(0, -1)),
-                                Direction.NORTH,
-                                pressLeftArrowKey(),
-                                List.of(new Location(-1, 0), new Location(0, 0))),
-                        new Example(
-                                List.of(new Location(-1, 0), new Location(0, 0)),
-                                Direction.WEST,
-                                pressDownArrowKey(),
-                                List.of(new Location(-1, -1), new Location(-1, 0))),
-                        new Example(
-                                List.of(new Location(-1, -1), new Location(-1, 0)),
-                                Direction.SOUTH,
-                                pressRightArrowKey(),
-                                List.of(new Location(0, -1), new Location(-1, -1))),
-                        new Example(
-                                List.of(new Location(0, -1), new Location(-1, -1)),
-                                Direction.EAST,
-                                pressUpArrowKey(),
-                                List.of(new Location(0, 0), new Location(0, -1)))
-                ).map(example -> new Test(example.toString(), () ->
-                    {
-                        var snake = Snake.alive(
-                                example.snakeLocation,
-                                example.snakeDirection);
-                        snake.keyPressed(example.keyEvent);
-                        snake.update(6);
-                        assert snake.location().equals(
-                                example.expectedSnakeLocation);
-                    })
-                ).forEach(Test::run);
             }),
             new Test("""
                     The snake doesn't change direction when
@@ -250,6 +171,88 @@ public final class Tests
                 '\0');
     }
 
+    public static List<Test> snakeTests = Stream.of(
+            new Example(
+                    List.of(new Location(0, 0), new Location(0, -1)),
+                    Direction.NORTH,
+                    pressUpArrowKey(),
+                    List.of(new Location(0, 1), new Location(0, 0))),
+            new Example(
+                    List.of(new Location(0, 0), new Location(0, 1)),
+                    Direction.SOUTH,
+                    pressDownArrowKey(),
+                    List.of(new Location(0, -1), new Location(0, 0))),
+            new Example(
+                    List.of(new Location(0, 0), new Location(1, 0)),
+                    Direction.WEST,
+                    pressLeftArrowKey(),
+                    List.of(new Location(-1, 0), new Location(0, 0))),
+            new Example(
+                    List.of(new Location(0, 0), new Location(-1, 0)),
+                    Direction.EAST,
+                    pressRightArrowKey(),
+                    List.of(new Location(1, 0), new Location(0, 0))),
+            new Example(
+                    List.of(new Location(0, 0), new Location(0, -1)),
+                    Direction.NORTH,
+                    pressRightArrowKey(),
+                    List.of(new Location(1, 0), new Location(0, 0))),
+            new Example(
+                    List.of(new Location(1, 0), new Location(0, 0)),
+                    Direction.EAST,
+                    pressDownArrowKey(),
+                    List.of(new Location(1, -1), new Location(1, 0))),
+            new Example(
+                    List.of(new Location(1, -1), new Location(1, 0)),
+                    Direction.SOUTH,
+                    pressLeftArrowKey(),
+                    List.of(new Location(0, -1), new Location(1, -1))),
+            new Example(
+                    List.of(new Location(0, -1), new Location(1, -1)),
+                    Direction.WEST,
+                    pressUpArrowKey(),
+                    List.of(new Location(0, 0), new Location(0, -1))),
+            new Example(
+                    List.of(new Location(0, 0), new Location(0, -1)),
+                    Direction.NORTH,
+                    pressLeftArrowKey(),
+                    List.of(new Location(-1, 0), new Location(0, 0))),
+            new Example(
+                    List.of(new Location(-1, 0), new Location(0, 0)),
+                    Direction.WEST,
+                    pressDownArrowKey(),
+                    List.of(new Location(-1, -1), new Location(-1, 0))),
+            new Example(
+                    List.of(new Location(-1, -1), new Location(-1, 0)),
+                    Direction.SOUTH,
+                    pressRightArrowKey(),
+                    List.of(new Location(0, -1), new Location(-1, -1))),
+            new Example(
+                    List.of(new Location(0, -1), new Location(-1, -1)),
+                    Direction.EAST,
+                    pressUpArrowKey(),
+                    List.of(new Location(0, 0), new Location(0, -1))))
+            .map(example -> new Test(
+                    String.format("""
+                                    The snake at %s and directed towards %s reaches %s when
+                                    the player presses %s
+                                    """,
+                            example.snakeLocation,
+                            example.snakeDirection,
+                            example.expectedSnakeLocation,
+                            KeyEvent.getKeyText(example.keyEvent.getKeyCode())),
+                    () ->
+                    {
+                        var snake = Snake.alive(
+                                example.snakeLocation,
+                                example.snakeDirection);
+                        snake.keyPressed(example.keyEvent);
+                        snake.update(6);
+                        assert snake.location().equals(
+                                example.expectedSnakeLocation);
+                    }))
+            .toList();
+
     public static Snake deadSnake(int xHead, int yHead)
     {
         return new Snake(
@@ -261,4 +264,10 @@ public final class Tests
         return new Snake(
                 List.of(new Location(0, 0)), direction, false);
     }
+
+    record Example(
+            List<Location> snakeLocation,
+            Direction snakeDirection,
+            KeyEvent keyEvent,
+            List<Location> expectedSnakeLocation) {}
 }

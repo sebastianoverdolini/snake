@@ -1,9 +1,11 @@
+import java.util.stream.Stream;
+
 public class Main
 {
     public static void main(String[] args)
     {
         var success = true;
-        for (var test : Tests.tests)
+        for (var test : Stream.concat(Tests.tests.stream(), DirectionTest.tests.stream()).toList())
         {
             try
             {

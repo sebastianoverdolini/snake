@@ -121,43 +121,6 @@ public final class Tests
                 assert snake.currentDirection == Direction.NORTH;
             }));
 
-    public static KeyEvent pressLeftArrowKey()
-    {
-        return new KeyEvent(
-                new Component() {}, 0, 0, 0, KeyEvent.VK_LEFT, '\0');
-    }
-
-    public static KeyEvent pressRightArrowKey()
-    {
-        return new KeyEvent(
-                new Component() {}, 0, 0, 0, KeyEvent.VK_RIGHT, '\0');
-    }
-
-    public static KeyEvent pressDownArrowKey()
-    {
-        return new KeyEvent(
-                new Component() {}, 0, 0, 0, KeyEvent.VK_DOWN, '\0');
-    }
-
-    public static KeyEvent pressUpArrowKey()
-    {
-        return new KeyEvent(
-                new Component() {}, 0, 0, 0, KeyEvent.VK_UP, '\0');
-    }
-
-    public static KeyEvent key(Direction direction)
-    {
-        return new KeyEvent(
-                new Component() {}, 0, 0, 0,
-                switch (direction) {
-                    case NORTH -> KeyEvent.VK_UP;
-                    case SOUTH -> KeyEvent.VK_DOWN;
-                    case WEST -> KeyEvent.VK_LEFT;
-                    case EAST -> KeyEvent.VK_RIGHT;
-                },
-                '\0');
-    }
-
     public static List<Test> snakeTests = Stream.of(
             new Example(
                     List.of(new Location(0, 0), new Location(0, -1)),
@@ -239,6 +202,43 @@ public final class Tests
                                 example.expectedSnakeLocation);
                     }))
             .toList();
+
+    public static KeyEvent pressLeftArrowKey()
+    {
+        return new KeyEvent(
+                new Component() {}, 0, 0, 0, KeyEvent.VK_LEFT, '\0');
+    }
+
+    public static KeyEvent pressRightArrowKey()
+    {
+        return new KeyEvent(
+                new Component() {}, 0, 0, 0, KeyEvent.VK_RIGHT, '\0');
+    }
+
+    public static KeyEvent pressDownArrowKey()
+    {
+        return new KeyEvent(
+                new Component() {}, 0, 0, 0, KeyEvent.VK_DOWN, '\0');
+    }
+
+    public static KeyEvent pressUpArrowKey()
+    {
+        return new KeyEvent(
+                new Component() {}, 0, 0, 0, KeyEvent.VK_UP, '\0');
+    }
+
+    public static KeyEvent key(Direction direction)
+    {
+        return new KeyEvent(
+                new Component() {}, 0, 0, 0,
+                switch (direction) {
+                    case NORTH -> KeyEvent.VK_UP;
+                    case SOUTH -> KeyEvent.VK_DOWN;
+                    case WEST -> KeyEvent.VK_LEFT;
+                    case EAST -> KeyEvent.VK_RIGHT;
+                },
+                '\0');
+    }
 
     public static Snake deadSnake(int xHead, int yHead)
     {

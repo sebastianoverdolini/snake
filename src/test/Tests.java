@@ -56,75 +56,7 @@ public final class Tests
                 snake.render(100, 1, g);
                 assert g.logs.get(0).equals("setColor " + Color.GRAY);
             }),
-            new Test("""
-                    An alive snake, lined and directed to north, increases
-                    its y coordinates by one at each update
-                    """, () ->
-            {
-                var snake = Snake.alive(
-                        List.of(new Location(0, 0), new Location(0, -1)),
-                        Direction.NORTH);
-                snake.update(100);
-                Assertions.assertEquals(
-                        snake.location(),
-                        List.of(new Location(0, 1), new Location(0, 0)));
-                snake.update(100);
-                Assertions.assertEquals(
-                        snake.location(),
-                        List.of(new Location(0, 2), new Location(0, 1)));
-            }),
-            new Test("""
-                    An alive snake, lined and directed to south, decreases
-                    its y coordinates by one at each update
-                    """, () ->
-            {
-                var snake = Snake.alive(
-                        List.of(new Location(0, 0), new Location(0, 1)),
-                        Direction.SOUTH);
-                snake.update(100);
-                Assertions.assertEquals(
-                        snake.location(),
-                        List.of(new Location(0, -1), new Location(0, 0)));
-                snake.update(100);
-                Assertions.assertEquals(
-                        snake.location(),
-                        List.of(new Location(0, -2), new Location(0, -1)));
-            }),
-            new Test("""
-                    An alive snake, lined and directed to west, decreases
-                    its x coordinates by one at each update
-                    """, () ->
-            {
-                var snake = Snake.alive(
-                        List.of(new Location(0, 0), new Location(1, 0)),
-                        Direction.WEST);
-                snake.update(100);
-                Assertions.assertEquals(
-                        snake.location(),
-                        List.of(new Location(-1, 0), new Location(0, 0)));
-                snake.update(100);
-                Assertions.assertEquals(
-                        snake.location(),
-                        List.of(new Location(-2, 0), new Location(-1, 0)));
-            }),
-            new Test("""
-                    An alive snake, lined and directed to east, increases
-                    its x coordinates by one at each update
-                    """, () ->
-            {
-                var snake = Snake.alive(
-                        List.of(new Location(0, 0), new Location(-1, 0)),
-                        Direction.EAST);
-                snake.update(100);
-                Assertions.assertEquals(
-                        snake.location(),
-                        List.of(new Location(1, 0), new Location(0, 0)));
-                snake.update(100);
-                Assertions.assertEquals(
-                        snake.location(),
-                        List.of(new Location(2, 0), new Location(1, 0)));
-            }),
-            new Test("The snake's body follows its head when it turns", () ->
+            new Test("The snake's body follows its head when it moves", () ->
             {
                 record Example(
                         List<Location> snakeLocation,
@@ -132,6 +64,26 @@ public final class Tests
                         KeyEvent keyEvent,
                         List<Location> expectedSnakeLocation) {}
                 Stream.of(
+                        new Example(
+                                List.of(new Location(0, 0), new Location(0, -1)),
+                                Direction.NORTH,
+                                pressUpArrowKey(),
+                                List.of(new Location(0, 1), new Location(0, 0))),
+                        new Example(
+                                List.of(new Location(0, 0), new Location(0, 1)),
+                                Direction.SOUTH,
+                                pressDownArrowKey(),
+                                List.of(new Location(0, -1), new Location(0, 0))),
+                        new Example(
+                                List.of(new Location(0, 0), new Location(1, 0)),
+                                Direction.WEST,
+                                pressLeftArrowKey(),
+                                List.of(new Location(-1, 0), new Location(0, 0))),
+                        new Example(
+                                List.of(new Location(0, 0), new Location(-1, 0)),
+                                Direction.EAST,
+                                pressRightArrowKey(),
+                                List.of(new Location(1, 0), new Location(0, 0))),
                         new Example(
                                 List.of(new Location(0, 0), new Location(0, -1)),
                                 Direction.NORTH,

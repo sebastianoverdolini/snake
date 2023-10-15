@@ -4,6 +4,6 @@ public class Assertions
 
     public static <T> void assertEquals(T actual, T expected)
     {
-        assert actual.equals(expected) : actual;
+        assert actual.equals(expected);
     }
 }

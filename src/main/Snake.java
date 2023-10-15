@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import static java.awt.event.KeyEvent.*;
 
-final class Snake implements KeyListener
+final public class Snake implements KeyListener
 {
     private List<Location> location;
     public Direction currentDirection;

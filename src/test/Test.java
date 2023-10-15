@@ -22,7 +22,7 @@ public final class Test
         }
         catch (AssertionError error)
         {
-            System.out.println("FAILED: " + description);
+            System.err.println("FAILED: " + description);
             Optional.ofNullable(error.getMessage()).ifPresent(System.out::println);
             throw error;
         }

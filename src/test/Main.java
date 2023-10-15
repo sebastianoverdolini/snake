@@ -6,7 +6,11 @@ public class Main
     public static void main(String[] args)
     {
         var success = true;
-        var tests = Stream.of(Tests.tests, Tests.snakeTests, DirectionTest.tests)
+        var tests = Stream.of(
+                        GameTest.tests,
+                        Tests.tests,
+                        Tests.snakeTests,
+                        DirectionTest.tests)
                 .flatMap(Collection::stream)
                 .toList();
         for (var test : tests)

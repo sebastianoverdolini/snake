@@ -284,7 +284,7 @@ public final class Tests
                         new Location(0, 0)));
             }),
             new Test("""
-                    The alive snake doesn't change direction when
+                    The snake doesn't change direction when
                     the player presses an unknown button
                     """, () ->
             {
@@ -297,7 +297,7 @@ public final class Tests
                 assert snake.currentDirection == Snake.Direction.EAST;
             }),
             new Test("""
-                    The alive snake doesn't turn when the player tries to
+                    The snake doesn't turn when the player tries to
                     reverse its direction
                     """, () ->
             {

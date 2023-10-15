@@ -14,7 +14,7 @@ public final class Game
                         new Location(0, 0),
                         new Location(-1, 0),
                         new Location(-2, 0)),
-                Snake.Direction.EAST);
+                Direction.EAST);
     }
 
     public void update()

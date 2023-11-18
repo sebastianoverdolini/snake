@@ -43,10 +43,18 @@ final public class Snake implements KeyListener
         else location = Stream.concat(Stream.of(
                                 switch (currentDirection)
                                 {
-                                    case NORTH -> new Location(headLocation().x(), headLocation().y() + 1);
-                                    case SOUTH -> new Location(headLocation().x(), headLocation().y() - 1);
-                                    case WEST -> new Location(headLocation().x() - 1, headLocation().y());
-                                    case EAST -> new Location(headLocation().x() + 1, headLocation().y());
+                                    case NORTH -> new Location(
+                                            headLocation().x(),
+                                            headLocation().y() + 1);
+                                    case SOUTH -> new Location(
+                                            headLocation().x(),
+                                            headLocation().y() - 1);
+                                    case WEST -> new Location(
+                                            headLocation().x() - 1,
+                                            headLocation().y());
+                                    case EAST -> new Location(
+                                            headLocation().x() + 1,
+                                            headLocation().y());
                                 }),
                         location.subList(0, location.size() - 1).stream())
                 .toList();

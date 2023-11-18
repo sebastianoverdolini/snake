@@ -32,26 +32,24 @@ final public class Snake implements KeyListener
 
     public void update(int size)
     {
-        if (isAlive())
+        if (!isAlive()) return;
+        if (wantsTurn())
         {
-            if (wantsTurn())
-            {
-                currentDirection = nextDirection;
-                nextDirection = null;
-            }
-            if (isHittingWall(size))
-                die();
-            else location = Stream.concat(Stream.of(
-                    switch (currentDirection)
-                    {
-                        case NORTH -> new Location(headLocation().x(), headLocation().y() + 1);
-                        case SOUTH -> new Location(headLocation().x(), headLocation().y() - 1);
-                        case WEST -> new Location(headLocation().x() - 1, headLocation().y());
-                        case EAST -> new Location(headLocation().x() + 1, headLocation().y());
-                    }),
-                    location.subList(0, location.size() - 1).stream())
-                    .toList();
+            currentDirection = nextDirection;
+            nextDirection = null;
         }
+        if (isHittingWall(size))
+            die();
+        else location = Stream.concat(Stream.of(
+                                switch (currentDirection)
+                                {
+                                    case NORTH -> new Location(headLocation().x(), headLocation().y() + 1);
+                                    case SOUTH -> new Location(headLocation().x(), headLocation().y() - 1);
+                                    case WEST -> new Location(headLocation().x() - 1, headLocation().y());
+                                    case EAST -> new Location(headLocation().x() + 1, headLocation().y());
+                                }),
+                        location.subList(0, location.size() - 1).stream())
+                .toList();
     }
 
     private Location headLocation()

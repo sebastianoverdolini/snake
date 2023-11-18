@@ -113,7 +113,7 @@ public final class Tests
                 assert snake.location().equals(List.of(
                         new Location(1, 1)));
             }),
-            new Test("A dead snake can't change its current direction", () ->
+            new Test("A dead snake doesn't change its current direction", () ->
             {
                 var snake = deadSnake(Direction.NORTH);
                 snake.keyPressed(pressDownArrowKey());
